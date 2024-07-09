@@ -612,8 +612,10 @@ typedef ptrdiff_t  FT_PtrDist;
 
       /* insert new cell */
       cell = ras.cell_free++;
+#if !defined(__wasi__)
       if ( cell >= ras.cell_null )
         ft_longjmp( ras.jump_buffer, 1 );
+#endif
 
       cell->x     = ex;
       cell->area  = 0;
@@ -1926,7 +1928,9 @@ typedef ptrdiff_t  FT_PtrDist;
     volatile int  error;
 
 
+#if !defined(__wasi__)
     if ( ft_setjmp( ras.jump_buffer ) == 0 )
+#endif
     {
       if ( continued )
         FT_Trace_Disable();
@@ -1940,6 +1944,7 @@ typedef ptrdiff_t  FT_PtrDist;
                   ras.cell_null - ras.cell_free,
                   ras.cell_null - ras.cell_free == 1 ? "" : "s" ));
     }
+#if !defined(__wasi__)
     else
     {
       error = FT_THROW( Raster_Overflow );
@@ -1947,6 +1952,7 @@ typedef ptrdiff_t  FT_PtrDist;
       FT_TRACE7(( "band [%d..%d]: to be bisected\n",
                   ras.min_ey, ras.max_ey ));
     }
+#endif
 
     return error;
   }

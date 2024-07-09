@@ -92,7 +92,11 @@ static long qt_gettid()
 {
     // no error handling
     // this syscall has existed since Linux 2.4.11 and cannot fail
+#if defined(Q_OS_WASI)
+    return -1;
+#else
     return syscall(SYS_gettid);
+#endif
 }
 #elif defined(Q_OS_DARWIN)
 #  include <pthread.h>

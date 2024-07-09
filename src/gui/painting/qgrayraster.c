@@ -89,6 +89,8 @@
   /* parameter of the QT_FT_TRACE() and QT_FT_ERROR() macros, used to print/log  */
   /* messages during execution.                                            */
   /*                                                                       */
+#include <QtCore/qglobal.h>
+  
 #undef  QT_FT_COMPONENT
 #define QT_FT_COMPONENT  trace_smooth
 
@@ -121,16 +123,20 @@
 #  include <vxWorksCommon.h>    /* needed for setjmp.h */
 #endif
 #include <string.h>             /* for qt_ft_memcpy() */
+#if !defined(Q_OS_WASI)
 #include <setjmp.h>
+#endif
 #include <limits.h>
 
 #define QT_FT_UINT_MAX  UINT_MAX
 
 #define qt_ft_memset   memset
 
+#if !defined(Q_OS_WASI)
 #define qt_ft_setjmp   setjmp
 #define qt_ft_longjmp  longjmp
 #define qt_ft_jmp_buf  jmp_buf
+#endif
 
 #include <stddef.h>
 typedef ptrdiff_t  QT_FT_PtrDist;
@@ -274,7 +280,9 @@ QT_FT_END_STMNT
     int  band_size;
     int  band_shoot;
 
+#if !defined(Q_OS_WASI)
     qt_ft_jmp_buf  jump_buffer;
+#endif
 
     void*       buffer;
     long        buffer_size;
@@ -396,8 +404,10 @@ QT_FT_END_STMNT
       pcell = &cell->next;
     }
 
+#if !defined(Q_OS_WASI)
     if ( ras.num_cells >= ras.max_cells )
       qt_ft_longjmp( ras.jump_buffer, 1 );
+#endif
 
     cell        = ras.cells + ras.num_cells++;
     cell->x     = x;
@@ -1626,16 +1636,20 @@ QT_FT_END_STMNT
   {
     volatile int  error = 0;
 
+#if !defined(Q_OS_WASI)
     if ( qt_ft_setjmp( ras.jump_buffer ) == 0 )
+#endif
     {
       error = QT_FT_Outline_Decompose( &ras.outline, &ras );
       if ( !ras.invalid )
         gray_record_cell( RAS_VAR );
     }
+#if !defined(Q_OS_WASI)
     else
     {
       error = ErrRaster_Memory_Overflow;
     }
+#endif
 
     return error;
   }

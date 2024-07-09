@@ -3834,19 +3834,24 @@
             volatile TT_ValidatorRec  valid;
             volatile FT_Error         error = FT_Err_Ok;
 
-
+#if !defined(__wasi__)
             ft_validator_init( FT_VALIDATOR( &valid ), cmap, limit,
                                FT_VALIDATE_DEFAULT );
+#endif
 
             valid.num_glyphs = (FT_UInt)face->max_profile.numGlyphs;
 
+#if !defined(__wasi__)
             if ( ft_setjmp( FT_VALIDATOR( &valid )->jump_buffer) == 0 )
             {
               /* validate this cmap sub-table */
               error = clazz->validate( cmap, FT_VALIDATOR( &valid ) );
             }
+#endif
 
+#if !defined(__wasi__)
             if ( !valid.validator.error )
+#endif
             {
               FT_CMap  ttcmap;
 
@@ -3863,11 +3868,13 @@
                 ((TT_CMap)ttcmap)->flags = (FT_Int)error;
               }
             }
+#if !defined(__wasi__)
             else
             {
               FT_TRACE0(( "tt_face_build_cmaps:"
                           " broken cmap sub-table ignored\n" ));
             }
+#endif
             break;
           }
         }

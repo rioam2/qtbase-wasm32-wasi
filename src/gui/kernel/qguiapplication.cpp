@@ -1472,7 +1472,11 @@ void QGuiApplicationPrivate::createPlatformIntegration()
 #endif
 
     bool platformExplicitlySelected = false;
+#if defined(Q_OS_WASI)
+    QByteArray platformNameEnv = "offscreen";
+#else
     QByteArray platformNameEnv = qgetenv("QT_QPA_PLATFORM");
+#endif
     if (!platformNameEnv.isEmpty()) {
         platformName = platformNameEnv;
         platformExplicitlySelected = true;

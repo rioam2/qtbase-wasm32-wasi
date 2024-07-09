@@ -24,6 +24,10 @@ using namespace Qt::StringLiterals;
 
 void QFreeTypeFontDatabase::populateFontDatabase()
 {
+#if defined(Q_OS_WASI)
+    return;
+#endif
+
     QString fontpath = fontDir();
     QDir dir(fontpath);
 

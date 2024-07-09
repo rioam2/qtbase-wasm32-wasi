@@ -3,6 +3,8 @@
 
 #include "qtestsupport_core.h"
 
+#ifndef _LIBCPP_HAS_NO_THREADS
+
 #include <thread>
 
 QT_BEGIN_NAMESPACE
@@ -87,3 +89,5 @@ Q_CORE_EXPORT void QTest::qWait(int ms)
 }
 
 QT_END_NAMESPACE
+
+#endif
