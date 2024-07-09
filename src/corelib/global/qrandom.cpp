@@ -17,7 +17,7 @@
 #  include <sys/auxv.h>
 #endif
 
-#if QT_CONFIG(getentropy) && __has_include(<sys/random.h>)
+#if (QT_CONFIG(getentropy) || defined(Q_OS_WASI)) && __has_include(<sys/random.h>)
 #  include <sys/random.h>
 #elif !QT_CONFIG(getentropy) && (!defined(Q_OS_BSD4) || defined(__GLIBC__)) && !defined(Q_OS_WIN)
 #  include "qdeadlinetimer.h"
@@ -64,7 +64,7 @@ QBasicAtomicInteger<uint> qt_randomdevice_control = Q_BASIC_ATOMIC_INITIALIZER(0
 
 struct QRandomGenerator::SystemGenerator
 {
-#if QT_CONFIG(getentropy)
+#if QT_CONFIG(getentropy) || defined(Q_OS_WASI)
     static qsizetype fillBuffer(void *buffer, qsizetype count) noexcept
     {
         // getentropy can read at most 256 bytes, so break the reading

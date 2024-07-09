@@ -605,7 +605,7 @@ qt_feature("getauxval" PRIVATE
 )
 qt_feature("getentropy" PRIVATE
     LABEL "getentropy()"
-    CONDITION UNIX AND TEST_getentropy
+    CONDITION (UNIX OR WASI) AND TEST_getentropy
 )
 qt_feature("glib" PUBLIC PRIVATE
     LABEL "GLib"

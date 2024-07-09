@@ -69,7 +69,7 @@ enable_testing()
 # flag. Notably -rpath is specified which should implicitly enable -rpath-link, but that
 # doesn't seem to be the case.
 # Until this is figured out, disable the tests when cross-compiling to Linux.
-if(UNIX AND NOT APPLE AND NOT WIN32 AND CMAKE_CROSSCOMPILING AND NOT QT_ENABLE_CMAKE_BOOT2QT_TESTS
+if((UNIX OR WASI) AND NOT APPLE AND NOT WIN32 AND CMAKE_CROSSCOMPILING AND NOT QT_ENABLE_CMAKE_BOOT2QT_TESTS
     AND NOT QT_BUILD_MINIMAL_ANDROID_MULTI_ABI_TESTS)
     message(STATUS "Running CMake tests is disabled when cross-compiling to Linux / Boot2Qt.")
     return()

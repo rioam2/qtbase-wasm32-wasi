@@ -114,7 +114,7 @@ qt_internal_extend_target(Bootstrap
 ## Scopes:
 #####################################################################
 
-qt_internal_extend_target(Bootstrap CONDITION UNIX
+qt_internal_extend_target(Bootstrap CONDITION (UNIX OR WASI)
     SOURCES
         ../../corelib/io/qfilesystemengine_unix.cpp
         ../../corelib/io/qfilesystemiterator_unix.cpp
@@ -163,7 +163,7 @@ qt_internal_extend_target(Bootstrap CONDITION UIKIT
         ${FWUIKit}
 )
 
-qt_internal_extend_target(Bootstrap CONDITION UNIX AND NOT MACOS
+qt_internal_extend_target(Bootstrap CONDITION (UNIX OR WASI) AND NOT MACOS
     SOURCES
         ../../corelib/io/qstandardpaths_unix.cpp
 )

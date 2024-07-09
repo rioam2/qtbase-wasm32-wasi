@@ -89,6 +89,9 @@ void QLibrarySettings::load()
 
 static QSettings *findConfiguration()
 {
+#if defined(Q_OS_WASI)
+    return nullptr;
+#endif
     if (QLibraryInfoPrivate::qtconfManualPath)
         return new QSettings(*QLibraryInfoPrivate::qtconfManualPath, QSettings::IniFormat);
 
@@ -262,6 +265,11 @@ QVersionNumber QLibraryInfo::version() noexcept
 static QString prefixFromAppDirHelper()
 {
     QString appDir;
+
+#if defined(Q_OS_WASI)
+    appDir = "/qt";
+    return appDir;
+#endif
 
     if (QCoreApplication::instance()) {
 #ifdef Q_OS_DARWIN

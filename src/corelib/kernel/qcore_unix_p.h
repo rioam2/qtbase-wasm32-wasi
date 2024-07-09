@@ -40,7 +40,9 @@
 #endif
 
 #include <chrono>
+#if !defined(Q_OS_WASI)
 #include <sys/wait.h>
+#endif
 #include <errno.h>
 #include <fcntl.h>
 
@@ -192,11 +194,14 @@ inline void qt_ignore_sigpipe()
         // More than one thread could turn off SIGPIPE at the same time
         // But that's acceptable because they all would be doing the same
         // action
+#if defined(Q_OS_WASI)
+#else
         struct sigaction noaction;
         memset(&noaction, 0, sizeof(noaction));
         noaction.sa_handler = SIG_IGN;
         ::sigaction(SIGPIPE, &noaction, nullptr);
         atom.storeRelaxed(1);
+#endif
     }
 }
 
@@ -233,8 +238,14 @@ static inline int qt_safe_open(const char *pathname, int flags, mode_t mode = 07
 // call qt_safe_pipe
 static inline int qt_safe_pipe(int pipefd[2], int flags = 0)
 {
+#if defined(Q_OS_WASI)
+    Q_UNUSED(pipefd)
+#endif
     Q_ASSERT((flags & ~O_NONBLOCK) == 0);
 
+#if defined(Q_OS_WASI)
+    return 0;
+#else
 #ifdef QT_THREADSAFE_CLOEXEC
     // use pipe2
     flags |= O_CLOEXEC;
@@ -255,6 +266,7 @@ static inline int qt_safe_pipe(int pipefd[2], int flags = 0)
 
     return 0;
 #endif
+#endif // Q_OS_WASI
 }
 
 #endif // Q_OS_VXWORKS
@@ -262,6 +274,10 @@ static inline int qt_safe_pipe(int pipefd[2], int flags = 0)
 // don't call dup or fcntl(F_DUPFD)
 static inline int qt_safe_dup(int oldfd, int atleast = 0, int flags = FD_CLOEXEC)
 {
+#if defined(Q_OS_WASI)
+    Q_UNUSED(oldfd)
+    Q_UNUSED(atleast)
+#endif
     Q_ASSERT(flags == FD_CLOEXEC || flags == 0);
 
 #ifdef F_DUPFD_CLOEXEC
@@ -271,7 +287,11 @@ static inline int qt_safe_dup(int oldfd, int atleast = 0, int flags = FD_CLOEXEC
     return ::fcntl(oldfd, cmd, atleast);
 #else
     // use F_DUPFD
+#if defined(Q_OS_WASI)
+    int ret = -1;
+#else
     int ret = ::fcntl(oldfd, F_DUPFD, atleast);
+#endif
 
     if (flags && ret != -1)
         ::fcntl(ret, F_SETFD, flags);
@@ -283,8 +303,15 @@ static inline int qt_safe_dup(int oldfd, int atleast = 0, int flags = FD_CLOEXEC
 // call qt_safe_dup2
 static inline int qt_safe_dup2(int oldfd, int newfd, int flags = FD_CLOEXEC)
 {
+#if defined(Q_OS_WASI)
+    Q_UNUSED(oldfd)
+    Q_UNUSED(newfd)
+#endif
     Q_ASSERT(flags == FD_CLOEXEC || flags == 0);
 
+#if defined(Q_OS_WASI)
+    return -1;
+#else
     int ret;
 #ifdef QT_THREADSAFE_CLOEXEC
     // use dup3
@@ -298,6 +325,7 @@ static inline int qt_safe_dup2(int oldfd, int newfd, int flags = FD_CLOEXEC)
     if (flags)
         ::fcntl(newfd, F_SETFD, flags);
     return 0;
+#endif
 #endif
 }
 
@@ -339,30 +367,56 @@ static inline int qt_safe_close(int fd)
 static inline int qt_safe_execve(const char *filename, char *const argv[],
                                  char *const envp[])
 {
+#if defined(Q_OS_WASI)
+    Q_UNUSED(filename)
+    Q_UNUSED(argv)
+    Q_UNUSED(envp)
+    return -1;
+#else
     int ret;
     EINTR_LOOP(ret, ::execve(filename, argv, envp));
     return ret;
+#endif
 }
 
 static inline int qt_safe_execv(const char *path, char *const argv[])
 {
+#if defined(Q_OS_WASI)
+    Q_UNUSED(path)
+    Q_UNUSED(argv)
+    return -1;
+#else
     int ret;
     EINTR_LOOP(ret, ::execv(path, argv));
     return ret;
+#endif
 }
 
 static inline int qt_safe_execvp(const char *file, char *const argv[])
 {
+#if defined(Q_OS_WASI)
+    Q_UNUSED(file)
+    Q_UNUSED(argv)
+    return -1;
+#else
     int ret;
     EINTR_LOOP(ret, ::execvp(file, argv));
     return ret;
+#endif
 }
 
 static inline pid_t qt_safe_waitpid(pid_t pid, int *status, int options)
 {
+#if defined(Q_OS_WASI)
+    Q_UNUSED(pid)
+    Q_UNUSED(status)
+    Q_UNUSED(options)
+    return -1;
+#else
     int ret;
     EINTR_LOOP(ret, ::waitpid(pid, status, options));
     return ret;
+#endif
 }
 #endif // QT_CONFIG(process)
 
