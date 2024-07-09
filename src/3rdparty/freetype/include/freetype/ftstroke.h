@@ -265,7 +265,11 @@ FT_BEGIN_HEADER
    * @return:
    *    FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Stroker_New( FT_Library   library,
                   FT_Stroker  *astroker );
 
@@ -365,7 +369,11 @@ FT_BEGIN_HEADER
    *
    *   This function calls @FT_Stroker_Rewind automatically.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Stroker_ParseOutline( FT_Stroker   stroker,
                            FT_Outline*  outline,
                            FT_Bool      opened );
@@ -396,7 +404,11 @@ FT_BEGIN_HEADER
    *   This function is useful when you need to stroke a path that is not
    *   stored as an @FT_Outline object.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Stroker_BeginSubPath( FT_Stroker  stroker,
                            FT_Vector*  to,
                            FT_Bool     open );
@@ -422,7 +434,11 @@ FT_BEGIN_HEADER
    *   subpath was not 'opened', this function 'draws' a single line segment
    *   to the start position when needed.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Stroker_EndSubPath( FT_Stroker  stroker );
 
 
@@ -449,7 +465,11 @@ FT_BEGIN_HEADER
    *   You should call this function between @FT_Stroker_BeginSubPath and
    *   @FT_Stroker_EndSubPath.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Stroker_LineTo( FT_Stroker  stroker,
                      FT_Vector*  to );
 
@@ -480,7 +500,11 @@ FT_BEGIN_HEADER
    *   You should call this function between @FT_Stroker_BeginSubPath and
    *   @FT_Stroker_EndSubPath.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Stroker_ConicTo( FT_Stroker  stroker,
                       FT_Vector*  control,
                       FT_Vector*  to );
@@ -515,7 +539,11 @@ FT_BEGIN_HEADER
    *   You should call this function between @FT_Stroker_BeginSubPath and
    *   @FT_Stroker_EndSubPath.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Stroker_CubicTo( FT_Stroker  stroker,
                       FT_Vector*  control1,
                       FT_Vector*  control2,
@@ -561,7 +589,11 @@ FT_BEGIN_HEADER
    *   Use the function @FT_Stroker_GetCounts instead if you want to retrieve
    *   the counts associated to both borders.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Stroker_GetBorderCounts( FT_Stroker        stroker,
                               FT_StrokerBorder  border,
                               FT_UInt          *anum_points,
@@ -635,7 +667,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Stroker_GetCounts( FT_Stroker  stroker,
                         FT_UInt    *anum_points,
                         FT_UInt    *anum_contours );
@@ -711,7 +747,11 @@ FT_BEGIN_HEADER
    *   may need to manually adjust horizontal and vertical advance amounts to
    *   account for this added size.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Glyph_Stroke( FT_Glyph    *pglyph,
                    FT_Stroker   stroker,
                    FT_Bool      destroy );
@@ -752,7 +792,11 @@ FT_BEGIN_HEADER
    *   may need to manually adjust horizontal and vertical advance amounts to
    *   account for this added size.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Glyph_StrokeBorder( FT_Glyph    *pglyph,
                          FT_Stroker   stroker,
                          FT_Bool      inside,

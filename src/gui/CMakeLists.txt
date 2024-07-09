@@ -40,7 +40,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}
 endif()
 
 # Silence AUTOMOC warning 'No relevant classes found. No output generated.'
-if (NOT UNIX)
+if (NOT (UNIX OR WASI))
     set_source_files_properties(kernel/qplatformwindow_p.h
                                 PROPERTIES SKIP_AUTOMOC TRUE)
 endif()
@@ -292,7 +292,7 @@ set(qpdf_resource_files
     "painting/qpdfa_metadata.xml"
 )
 
-if(WIN32 OR (UNIX AND NOT APPLE))
+if(WIN32 OR ((UNIX OR WASI) AND NOT APPLE))
     set_target_properties(Gui PROPERTIES UNITY_BUILD OFF) # X11 define clashes/Windows oddities.
 endif()
 
@@ -692,12 +692,12 @@ qt_internal_extend_target(Gui CONDITION QT_FEATURE_freetype
         WrapFreetype::WrapFreetype
 )
 
-qt_internal_extend_target(Gui CONDITION UNIX AND NOT APPLE
+qt_internal_extend_target(Gui CONDITION (UNIX OR WASI) AND NOT APPLE
     SOURCES
         text/unix/qgenericunixfontdatabase_p.h
 )
 
-qt_internal_extend_target(Gui CONDITION QT_FEATURE_fontconfig AND QT_FEATURE_freetype AND UNIX AND NOT APPLE
+qt_internal_extend_target(Gui CONDITION QT_FEATURE_fontconfig AND QT_FEATURE_freetype AND (UNIX OR WASI) AND NOT APPLE
     SOURCES
         text/unix/qfontconfigdatabase.cpp text/unix/qfontconfigdatabase_p.h
         text/unix/qfontenginemultifontconfig.cpp text/unix/qfontenginemultifontconfig_p.h
@@ -749,7 +749,7 @@ qt_internal_extend_target(Gui CONDITION MINGW AND WIN32
 # Only enable the Pixman draw-helpers on platforms that support the GAS syntax of their asm files
 # Note: These helpers are only used for 16-bit surfaces, so excluding them does not generally
 # exclude neon-drawhelpers on these platforms.
-if(UNIX AND NOT ANDROID AND NOT INTEGRITY AND NOT (TEST_architecture_arch STREQUAL "arm64") AND NOT UIKIT AND NOT QT_IS_MACOS_UNIVERSAL)
+if((UNIX OR WASI) AND NOT ANDROID AND NOT INTEGRITY AND NOT (TEST_architecture_arch STREQUAL "arm64") AND NOT UIKIT AND NOT QT_IS_MACOS_UNIVERSAL)
     qt_internal_extend_target(Gui DEFINES ENABLE_PIXMAN_DRAWHELPERS)
     qt_internal_add_simd_part(Gui SIMD neon
         SOURCES
@@ -903,7 +903,7 @@ qt_internal_extend_target(Gui CONDITION WASM
         platform/wasm/qwasmlocalfileaccess.cpp platform/wasm/qwasmlocalfileaccess_p.h
 )
 
-qt_internal_extend_target(Gui CONDITION UNIX
+qt_internal_extend_target(Gui CONDITION (UNIX OR WASI)
     SOURCES
         platform/unix/qgenericunixeventdispatcher.cpp platform/unix/qgenericunixeventdispatcher_p.h
         platform/unix/qunixeventdispatcher.cpp
@@ -911,34 +911,34 @@ qt_internal_extend_target(Gui CONDITION UNIX
         platform/unix/qunixnativeinterface.cpp
 )
 
-qt_internal_extend_target(Gui CONDITION QT_FEATURE_glib AND UNIX
+qt_internal_extend_target(Gui CONDITION QT_FEATURE_glib AND (UNIX OR WASI)
     SOURCES
         platform/unix/qeventdispatcher_glib.cpp platform/unix/qeventdispatcher_glib_p.h
     LIBRARIES
         GLIB2::GLIB2
 )
 
-qt_internal_extend_target(Gui CONDITION UNIX AND (QT_FEATURE_xcb OR NOT UIKIT)
+qt_internal_extend_target(Gui CONDITION (UNIX OR WASI) AND (QT_FEATURE_xcb OR NOT UIKIT)
     SOURCES
         platform/unix/qgenericunixservices.cpp platform/unix/qgenericunixservices_p.h
 )
 
-qt_internal_extend_target(Gui CONDITION UNIX AND (QT_FEATURE_xcb)
+qt_internal_extend_target(Gui CONDITION (UNIX OR WASI) AND (QT_FEATURE_xcb)
     SOURCES
         platform/unix/qtx11extras.cpp platform/unix/qtx11extras_p.h
 )
 
-qt_internal_extend_target(Gui CONDITION TARGET Qt::DBus AND UNIX AND (QT_FEATURE_xcb OR NOT UIKIT)
+qt_internal_extend_target(Gui CONDITION TARGET Qt::DBus AND (UNIX OR WASI) AND (QT_FEATURE_xcb OR NOT UIKIT)
     LIBRARIES
         Qt::DBus
 )
 
-qt_internal_extend_target(Gui CONDITION UNIX AND (QT_FEATURE_xcb OR NOT MACOS) AND (QT_FEATURE_xcb OR NOT UIKIT)
+qt_internal_extend_target(Gui CONDITION (UNIX OR WASI) AND (QT_FEATURE_xcb OR NOT MACOS) AND (QT_FEATURE_xcb OR NOT UIKIT)
     SOURCES
         platform/unix/qgenericunixthemes.cpp platform/unix/qgenericunixthemes_p.h
 )
 
-qt_internal_extend_target(Gui CONDITION TARGET Qt::DBus AND UNIX AND (QT_FEATURE_xcb OR NOT MACOS) AND (QT_FEATURE_xcb OR NOT UIKIT)
+qt_internal_extend_target(Gui CONDITION TARGET Qt::DBus AND (UNIX OR WASI) AND (QT_FEATURE_xcb OR NOT MACOS) AND (QT_FEATURE_xcb OR NOT UIKIT)
     SOURCES
         platform/unix/dbusmenu/qdbusmenuadaptor.cpp platform/unix/dbusmenu/qdbusmenuadaptor_p.h
         platform/unix/dbusmenu/qdbusmenubar.cpp platform/unix/dbusmenu/qdbusmenubar_p.h
@@ -948,7 +948,7 @@ qt_internal_extend_target(Gui CONDITION TARGET Qt::DBus AND UNIX AND (QT_FEATURE
         platform/unix/dbusmenu/qdbusplatformmenu.cpp platform/unix/dbusmenu/qdbusplatformmenu_p.h
 )
 
-qt_internal_extend_target(Gui CONDITION QT_FEATURE_systemtrayicon AND TARGET Qt::DBus AND UNIX AND (QT_FEATURE_xcb OR NOT MACOS) AND (QT_FEATURE_xcb OR NOT UIKIT)
+qt_internal_extend_target(Gui CONDITION QT_FEATURE_systemtrayicon AND TARGET Qt::DBus AND (UNIX OR WASI) AND (QT_FEATURE_xcb OR NOT MACOS) AND (QT_FEATURE_xcb OR NOT UIKIT)
     SOURCES
         platform/unix/dbustray/qdbustrayicon.cpp platform/unix/dbustray/qdbustrayicon_p.h
         platform/unix/dbustray/qdbustraytypes.cpp platform/unix/dbustray/qdbustraytypes_p.h
@@ -956,7 +956,7 @@ qt_internal_extend_target(Gui CONDITION QT_FEATURE_systemtrayicon AND TARGET Qt:
         platform/unix/dbustray/qxdgnotificationproxy.cpp platform/unix/dbustray/qxdgnotificationproxy_p.h
 )
 
-qt_internal_extend_target(Gui CONDITION QT_FEATURE_xkbcommon AND UNIX
+qt_internal_extend_target(Gui CONDITION QT_FEATURE_xkbcommon AND (UNIX OR WASI)
     SOURCES
         platform/unix/qxkbcommon.cpp platform/unix/qxkbcommon_p.h
         platform/unix/qxkbcommon_3rdparty.cpp

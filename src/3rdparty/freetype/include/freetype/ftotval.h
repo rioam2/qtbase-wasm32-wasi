@@ -160,7 +160,11 @@ FT_BEGIN_HEADER
    *   doesn't exist in the font, or the application hasn't asked for
    *   validation.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_OpenType_Validate( FT_Face    face,
                         FT_UInt    validation_flags,
                         FT_Bytes  *BASE_table,

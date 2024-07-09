@@ -115,7 +115,11 @@ static bool checkXdgRuntimeDir(const QString &xdgRuntimeDir)
     };
 
     // http://standards.freedesktop.org/basedir-spec/latest/
+#if defined(Q_OS_WASI)
+    const uint myUid = uint(0);
+#else
     const uint myUid = uint(geteuid());
+#endif
     const QFile::Permissions wantedPerms = QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner;
     const QFileSystemMetaData::MetaDataFlags statFlags = QFileSystemMetaData::PosixStatFlags
                                                          | QFileSystemMetaData::LinkType;
@@ -244,7 +248,12 @@ QString QStandardPaths::writableLocation(StandardLocation type)
         bool fromEnv = !xdgRuntimeDir.isEmpty();
         if (xdgRuntimeDir.isEmpty() || !checkXdgRuntimeDir(xdgRuntimeDir)) {
             // environment variable not set or is set to something unsuitable
+    // http://standards.freedesktop.org/basedir-spec/latest/
+#if defined(Q_OS_WASI)
+            const uint myUid = uint(0);
+#else
             const uint myUid = uint(geteuid());
+#endif
             const QString userName = QFileSystemEngine::resolveUserName(myUid);
             xdgRuntimeDir = QDir::tempPath() + "/runtime-"_L1 + userName;
 

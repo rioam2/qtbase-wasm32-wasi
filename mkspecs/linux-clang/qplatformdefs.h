@@ -25,19 +25,27 @@
 #include <pthread.h>
 #include <dirent.h>
 #include <fcntl.h>
+#if !defined(Q_OS_WASI)
 #include <grp.h>
 #include <pwd.h>
+#endif
 #include <signal.h>
 #include <dlfcn.h>
 
 #include <sys/types.h>
 #include <sys/ioctl.h>
+#if !defined(Q_OS_WASI)
 #include <sys/ipc.h>
+#endif
 #include <sys/time.h>
+#if !defined(Q_OS_WASI)
 #include <sys/shm.h>
+#endif
 #include <sys/socket.h>
 #include <sys/stat.h>
+#if !defined(Q_OS_WASI)
 #include <sys/wait.h>
+#endif
 #include <netinet/in.h>
 
 #define QT_USE_XOPEN_LFS_EXTENSIONS

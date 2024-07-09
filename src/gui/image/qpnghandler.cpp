@@ -33,6 +33,7 @@
     To work around this we override the png_jmpbuf macro to cast
     longjmp to a png_longjmp_ptr.
 */
+#if !defined(Q_OS_WASI)
 #   undef png_jmpbuf
 #   ifdef PNG_SETJMP_SUPPORTED
 #       define png_jmpbuf(png_ptr) \
@@ -41,6 +42,7 @@
 #       define png_jmpbuf(png_ptr) \
             (LIBPNG_WAS_COMPILED_WITH__PNG_NO_SETJMP)
 #   endif
+#endif
 #endif
 
 QT_BEGIN_NAMESPACE
@@ -532,11 +534,13 @@ bool QPngHandlerPrivate::readPngHeader()
         return false;
     }
 
+#if !defined(Q_OS_WASI)
     if (setjmp(png_jmpbuf(png_ptr))) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         png_ptr = nullptr;
         return false;
     }
+#endif
 
     png_set_read_fn(png_ptr, this, iod_read_fn);
     png_read_info(png_ptr, info_ptr);
@@ -616,6 +620,7 @@ bool QPngHandlerPrivate::readPngImage(QImage *outImage)
         return false;
     }
 
+#if !defined(Q_OS_WASI)
     if (setjmp(png_jmpbuf(png_ptr))) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         png_ptr = nullptr;
@@ -623,6 +628,7 @@ bool QPngHandlerPrivate::readPngImage(QImage *outImage)
         state = Error;
         return false;
     }
+#endif
 
     if (gamma != 0.0 && fileGamma != 0.0) {
         // This configuration forces gamma correction and
@@ -872,10 +878,12 @@ bool QPNGImageWriter::writeImage(const QImage& image, int compression_in, const 
         return false;
     }
 
+#if !defined(Q_OS_WASI)
     if (setjmp(png_jmpbuf(png_ptr))) {
         png_destroy_write_struct(&png_ptr, &info_ptr);
         return false;
     }
+#endif
 
     int compression = compression_in;
     if (compression >= 0) {

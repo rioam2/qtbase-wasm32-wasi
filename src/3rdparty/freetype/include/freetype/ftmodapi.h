@@ -272,7 +272,11 @@ FT_BEGIN_HEADER
    *   An error will be returned if a module already exists by that name, or
    *   if the module requires a version of FreeType that is too great.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Add_Module( FT_Library              library,
                  const FT_Module_Class*  clazz );
 
@@ -326,7 +330,11 @@ FT_BEGIN_HEADER
    * @note:
    *   The module object is destroyed by the function in case of success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Remove_Module( FT_Library  library,
                     FT_Module   module );
 
@@ -409,7 +417,11 @@ FT_BEGIN_HEADER
    *   2.4.11
    *
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Property_Set( FT_Library        library,
                    const FT_String*  module_name,
                    const FT_String*  property_name,
@@ -472,7 +484,11 @@ FT_BEGIN_HEADER
    *   2.4.11
    *
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Property_Get( FT_Library        library,
                    const FT_String*  module_name,
                    const FT_String*  property_name,
@@ -547,7 +563,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.4.2
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Reference_Library( FT_Library  library );
 
 
@@ -586,7 +606,11 @@ FT_BEGIN_HEADER
    *   See the discussion of reference counters in the description of
    *   @FT_Reference_Library.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_New_Library( FT_Memory    memory,
                   FT_Library  *alibrary );
 
@@ -611,7 +635,11 @@ FT_BEGIN_HEADER
    *   See the discussion of reference counters in the description of
    *   @FT_Reference_Library.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Done_Library( FT_Library  library );
 
 

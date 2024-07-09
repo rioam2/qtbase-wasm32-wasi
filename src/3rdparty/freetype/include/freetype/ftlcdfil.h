@@ -206,7 +206,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.3.0
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Library_SetLcdFilter( FT_Library    library,
                            FT_LcdFilter  filter );
 
@@ -242,7 +246,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.4.0
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Library_SetLcdFilterWeights( FT_Library      library,
                                   unsigned char  *weights );
 
@@ -308,7 +316,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.10.0
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Library_SetLcdGeometry( FT_Library  library,
                              FT_Vector   sub[3] );
 

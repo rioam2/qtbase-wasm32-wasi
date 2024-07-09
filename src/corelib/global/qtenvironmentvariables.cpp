@@ -343,7 +343,9 @@ void qTzSet()
 #if defined(Q_OS_WIN)
     _tzset();
 #else
+#  if !defined(Q_OS_WASI)
     tzset();
+#  endif // Q_OS_WASI
 #endif // Q_OS_WIN
 }
 
@@ -374,7 +376,9 @@ bool qLocalTime(time_t utc, struct tm *local)
     // thread-safe and doesn't use a shared static data area.
     // As localtime_r() is not specified to work as if it called tzset(),
     // make an explicit call.
+#if !defined(Q_OS_WASI)
     tzset();
+#endif // Q_OS_WASI
     if (tm *res = localtime_r(&utc, local)) {
         Q_ASSERT(res == local);
         Q_UNUSED(res);
@@ -413,7 +417,11 @@ QString qTzName(int dstIndex)
 #else
     {
         const auto locker = qt_scoped_lock(environmentMutex);
+#if !defined(Q_OS_WASI)
         const char *const src = tzname[dstIndex];
+#else
+        const char *const src = nullptr;
+#endif
         ok = src != nullptr;
         if (ok)
             memcpy(name, src, std::min(sizeof(name), strlen(src) + 1));

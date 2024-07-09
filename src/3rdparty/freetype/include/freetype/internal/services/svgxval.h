@@ -37,6 +37,7 @@ FT_BEGIN_HEADER
 #define FT_SERVICE_ID_GX_VALIDATE           "truetypegx-validate"
 #define FT_SERVICE_ID_CLASSICKERN_VALIDATE  "classickern-validate"
 
+#if !defined(__wasi__)
   typedef FT_Error
   (*gxv_validate_func)( FT_Face   face,
                         FT_UInt   gx_flags,
@@ -59,6 +60,7 @@ FT_BEGIN_HEADER
   {
     ckern_validate_func  validate;
   };
+#endif
 
   /* */
 

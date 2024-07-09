@@ -275,7 +275,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_Multi_Master( FT_Face           face,
                        FT_Multi_Master  *amaster );
 
@@ -302,7 +306,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_MM_Var( FT_Face      face,
                  FT_MM_Var*  *amaster );
 
@@ -323,7 +331,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Done_MM_Var( FT_Library   library,
                   FT_MM_Var   *amaster );
 
@@ -365,7 +377,11 @@ FT_BEGIN_HEADER
    *   (i.e., @FT_IS_VARIATION will return true).  If `num_coords` is zero,
    *   this bit flag gets unset.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Set_MM_Design_Coordinates( FT_Face   face,
                                 FT_UInt   num_coords,
                                 FT_Long*  coords );
@@ -412,7 +428,11 @@ FT_BEGIN_HEADER
    *   (i.e., @FT_IS_VARIATION will return true).  If `num_coords` is zero,
    *   this bit flag gets unset.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Set_Var_Design_Coordinates( FT_Face    face,
                                  FT_UInt    num_coords,
                                  FT_Fixed*  coords );
@@ -452,7 +472,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.7.1
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_Var_Design_Coordinates( FT_Face    face,
                                  FT_UInt    num_coords,
                                  FT_Fixed*  coords );
@@ -498,7 +522,11 @@ FT_BEGIN_HEADER
    *   (i.e., @FT_IS_VARIATION will return true).  If `num_coords` is zero,
    *   this bit flag gets unset.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Set_MM_Blend_Coordinates( FT_Face    face,
                                FT_UInt    num_coords,
                                FT_Fixed*  coords );
@@ -535,7 +563,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.7.1
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_MM_Blend_Coordinates( FT_Face    face,
                                FT_UInt    num_coords,
                                FT_Fixed*  coords );
@@ -549,7 +581,11 @@ FT_BEGIN_HEADER
    * @description:
    *   This is another name of @FT_Set_MM_Blend_Coordinates.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Set_Var_Blend_Coordinates( FT_Face    face,
                                 FT_UInt    num_coords,
                                 FT_Fixed*  coords );
@@ -566,7 +602,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.7.1
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_Var_Blend_Coordinates( FT_Face    face,
                                 FT_UInt    num_coords,
                                 FT_Fixed*  coords );
@@ -616,7 +656,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.10
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Set_MM_WeightVector( FT_Face    face,
                           FT_UInt    len,
                           FT_Fixed*  weightvector );
@@ -660,7 +704,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.10
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_MM_WeightVector( FT_Face    face,
                           FT_UInt*   len,
                           FT_Fixed*  weightvector );
@@ -712,7 +760,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.8.1
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_Var_Axis_Flags( FT_MM_Var*  master,
                          FT_UInt     axis_index,
                          FT_UInt*    flags );
@@ -751,7 +803,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.9
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Set_Named_Instance( FT_Face  face,
                          FT_UInt  instance_index );
 
@@ -790,7 +846,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.13.1
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_Default_Named_Instance( FT_Face   face,
                                  FT_UInt  *instance_index );
 

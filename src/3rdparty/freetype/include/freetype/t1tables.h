@@ -514,7 +514,11 @@ FT_BEGIN_HEADER
    *   ```
    *
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_PS_Font_Info( FT_Face      face,
                        PS_FontInfo  afont_info );
 
@@ -557,7 +561,11 @@ FT_BEGIN_HEADER
    *   ```
    *
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_PS_Font_Private( FT_Face     face,
                           PS_Private  afont_private );
 

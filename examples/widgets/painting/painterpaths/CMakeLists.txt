@@ -31,7 +31,7 @@ target_link_libraries(painterpaths PRIVATE
     Qt6::Widgets
 )
 
-if(UNIX AND NOT APPLE AND NOT HAIKU AND NOT INTEGRITY AND NOT VXWORKS)
+if((UNIX OR WASI) AND NOT APPLE AND NOT HAIKU AND NOT INTEGRITY AND NOT VXWORKS)
     target_link_libraries(painterpaths PRIVATE
         m
     )

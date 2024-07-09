@@ -121,7 +121,11 @@ FT_BEGIN_HEADER
    *   (doing nothing, that is, not calling any emitter); if necessary, you
    *   should filter this out, too.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Outline_Decompose( FT_Outline*              outline,
                         const FT_Outline_Funcs*  func_interface,
                         void*                    user );
@@ -160,7 +164,11 @@ FT_BEGIN_HEADER
    *   The reason why this function takes a `library` parameter is simply to
    *   use the library's memory allocator.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Outline_New( FT_Library   library,
                   FT_UInt      numPoints,
                   FT_Int       numContours,
@@ -189,7 +197,11 @@ FT_BEGIN_HEADER
    *   If the outline's 'owner' field is not set, only the outline descriptor
    *   will be released.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Outline_Done( FT_Library   library,
                    FT_Outline*  outline );
 
@@ -213,7 +225,11 @@ FT_BEGIN_HEADER
    *   An empty outline, or an outline with a single point only is also
    *   valid.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Outline_Check( FT_Outline*  outline );
 
 
@@ -296,7 +312,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Outline_Copy( const FT_Outline*  source,
                    FT_Outline        *target );
 
@@ -372,7 +392,11 @@ FT_BEGIN_HEADER
    *   ```
    *
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Outline_Embolden( FT_Outline*  outline,
                        FT_Pos       strength );
 
@@ -390,7 +414,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.4.10
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Outline_EmboldenXY( FT_Outline*  outline,
                          FT_Pos       xstrength,
                          FT_Pos       ystrength );
@@ -454,7 +482,11 @@ FT_BEGIN_HEADER
    *   select the gray-level rasterizer, and you want less than 256 gray
    *   levels, you have to use @FT_Outline_Render directly.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Outline_Get_Bitmap( FT_Library        library,
                          FT_Outline*       outline,
                          const FT_Bitmap  *abitmap );
@@ -492,7 +524,11 @@ FT_BEGIN_HEADER
    *   allowing FreeType rasterizer to be used for direct composition,
    *   translucency, etc.  See @FT_Raster_Params for more details.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Outline_Render( FT_Library         library,
                      FT_Outline*        outline,
                      FT_Raster_Params*  params );

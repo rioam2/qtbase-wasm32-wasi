@@ -75,7 +75,7 @@ qt_internal_extend_target(QSQLiteDriverPlugin CONDITION QNX AND NOT QT_FEATURE_s
         _QNX_SOURCE
 )
 
-qt_internal_extend_target(QSQLiteDriverPlugin CONDITION UNIX AND NOT QT_FEATURE_system_sqlite
+qt_internal_extend_target(QSQLiteDriverPlugin CONDITION (UNIX OR WASI) AND NOT QT_FEATURE_system_sqlite
     DEFINES
         HAVE_USLEEP=1
 )

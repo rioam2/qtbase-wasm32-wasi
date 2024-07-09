@@ -132,11 +132,13 @@ inline short QSocketNotifierSetUNIX::events() const noexcept
     if (notifiers[0])
         result |= POLLIN;
 
+#if !defined(Q_OS_WASI)
     if (notifiers[1])
         result |= POLLOUT;
 
     if (notifiers[2])
         result |= POLLPRI;
+#endif
 
     return result;
 }

@@ -23,9 +23,11 @@
 #  include <sys/vfs.h>
 #  include <mntent.h>
 #elif defined(Q_OS_LINUX) || defined(Q_OS_HURD)
-#  include <mntent.h>
-#  include <sys/statvfs.h>
-#  include <sys/sysmacros.h>
+#  if !defined(Q_OS_WASI)
+#    include <mntent.h>
+#    include <sys/statvfs.h>
+#    include <sys/sysmacros.h>
+#  endif
 #elif defined(Q_OS_SOLARIS)
 #  include <sys/mnttab.h>
 #  include <sys/statvfs.h>
@@ -112,7 +114,7 @@ private:
     QByteArray m_fileSystemType;
     QByteArray m_device;
     QByteArray m_options;
-#elif defined(Q_OS_LINUX) || defined(Q_OS_HURD)
+#elif (defined(Q_OS_LINUX) || defined(Q_OS_HURD)) && !defined(Q_OS_WASI)
     struct mountinfoent : public mntent {
         // Details from proc(5) section from /proc/<pid>/mountinfo:
         //(1)  mount ID: a unique ID for the mount (may be reused after umount(2)).
@@ -355,6 +357,7 @@ inline QByteArray QStorageIterator::subvolume() const
 static const int bufferSize = 1024; // 2 paths (mount point+device) and metainfo;
                                     // should be enough
 
+#if !defined(Q_OS_WASI)
 inline QStorageIterator::QStorageIterator() :
     buffer(QByteArray(bufferSize, 0))
 {
@@ -371,7 +374,11 @@ inline QStorageIterator::QStorageIterator() :
         fp = ::setmntent(_PATH_MOUNTED, "r");
     }
 }
+#else
+inline QStorageIterator::QStorageIterator() {}
+#endif
 
+#if !defined(Q_OS_WASI)
 inline QStorageIterator::~QStorageIterator()
 {
     if (fp) {
@@ -381,14 +388,24 @@ inline QStorageIterator::~QStorageIterator()
             ::endmntent(fp);
     }
 }
+#else
+inline QStorageIterator::~QStorageIterator() {}
+#endif
 
 inline bool QStorageIterator::isValid() const
 {
+#if defined(Q_OS_WASI)
+    return false;
+#else
     return fp != nullptr;
+#endif
 }
 
 inline bool QStorageIterator::next()
 {
+#if defined(Q_OS_WASI)
+    return false;
+#else
     mnt.subvolume = nullptr;
     mnt.superopts = nullptr;
     if (!usingMountinfo)
@@ -526,20 +543,32 @@ inline bool QStorageIterator::next()
     *ptr = '\0';
 
     return true;
+#endif
 }
 
 inline QString QStorageIterator::rootPath() const
 {
+#if defined(Q_OS_WASI)
+    return QByteArray();
+#else
     return QFile::decodeName(mnt.mnt_dir);
+#endif
 }
 
 inline QByteArray QStorageIterator::fileSystemType() const
 {
+#if defined(Q_OS_WASI)
+    return QByteArray();
+#else
     return QByteArray(mnt.mnt_type);
+#endif
 }
 
 inline QByteArray QStorageIterator::device() const
 {
+#if defined(Q_OS_WASI)
+    return QByteArray();
+#else
 #ifdef Q_OS_LINUX
     // check that the device exists
     if (mnt.mnt_fsname[0] == '/' && access(mnt.mnt_fsname, F_OK) != 0) {
@@ -558,10 +587,14 @@ inline QByteArray QStorageIterator::device() const
     }
 #endif
     return QByteArray(mnt.mnt_fsname);
+#endif
 }
 
 inline QByteArray QStorageIterator::options() const
 {
+#if defined(Q_OS_WASI)
+    return QByteArray();
+#else
     // Merge the two options, starting with the superblock options and letting
     // the per-mount options override.
     const char *superopts = mnt.superopts;
@@ -578,11 +611,16 @@ inline QByteArray QStorageIterator::options() const
     if (superopts)
         return QByteArray(superopts) + ',' + mnt.mnt_opts;
     return QByteArray(mnt.mnt_opts);
+#endif
 }
 
 inline QByteArray QStorageIterator::subvolume() const
 {
+#if defined(Q_OS_WASI)
+    return QByteArray();
+#else
     return QByteArray(mnt.subvolume);
+#endif
 }
 #elif defined(Q_OS_HAIKU)
 inline QStorageIterator::QStorageIterator()
@@ -802,6 +840,7 @@ void QStorageInfoPrivate::doStat()
 
 void QStorageInfoPrivate::retrieveVolumeInfo()
 {
+#if !defined(Q_OS_WASI)
     QT_STATFSBUF statfs_buf;
     int result;
     EINTR_LOOP(result, QT_STATFS(QFile::encodeName(rootPath).constData(), &statfs_buf));
@@ -827,6 +866,7 @@ void QStorageInfoPrivate::retrieveVolumeInfo()
         readOnly = (statfs_buf.f_flag & ST_RDONLY) != 0;
 #endif
     }
+#endif
 }
 
 QList<QStorageInfo> QStorageInfoPrivate::mountedVolumes()

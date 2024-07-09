@@ -88,7 +88,9 @@ FT_BEGIN_HEADER
   /* validator structure */
   typedef struct  FT_ValidatorRec_
   {
+#if !defined(__wasi__)
     ft_jmp_buf          jump_buffer; /* used for exception handling      */
+#endif
 
     const FT_Byte*      base;        /* address of table in memory       */
     const FT_Byte*      limit;       /* `base' + sizeof(table) in memory */
@@ -103,7 +105,7 @@ FT_BEGIN_HEADER
 
 #define FT_VALIDATOR( x )  ( (FT_Validator)( x ) )
 
-
+#if !defined(__wasi__)
   FT_BASE( void )
   ft_validator_init( FT_Validator        valid,
                      const FT_Byte*      base,
@@ -122,14 +124,21 @@ FT_BEGIN_HEADER
   FT_BASE( void )
   ft_validator_error( FT_Validator  valid,
                       FT_Error      error );
+#endif
 
 
   /* Calls ft_validate_error.  Assumes that the `valid' local variable */
   /* holds a pointer to the current validator object.                  */
   /*                                                                   */
-#define FT_INVALID( _error )  FT_INVALID_( _error )
-#define FT_INVALID_( _error ) \
+#if !defined(__wasi__)
+#  define FT_INVALID( _error )  FT_INVALID_( _error )
+#  define FT_INVALID_( _error ) \
           ft_validator_error( valid, FT_THROW( _error ) )
+#else
+#  define FT_INVALID( _error )  FT_INVALID_( _error )
+#  define FT_INVALID_( _error ) \
+          // ft_validator_error( valid, FT_THROW( _error ) )
+#endif
 
   /* called when a broken table is detected */
 #define FT_INVALID_TOO_SHORT \

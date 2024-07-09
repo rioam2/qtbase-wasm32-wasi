@@ -106,7 +106,7 @@ static qint64 qt_write_loop(int fd, const char *data, qint64 len)
 
 static bool setNativeLocks(int fd)
 {
-#if defined(LOCK_EX) && defined(LOCK_NB)
+#if defined(LOCK_EX) && defined(LOCK_NB) && !defined(Q_OS_WASI)
     if (flock(fd, LOCK_EX | LOCK_NB) == -1) // other threads, and other processes on a local fs
         return false;
 #else
@@ -170,8 +170,10 @@ bool QLockFilePrivate::removeStaleLock()
 
 bool QLockFilePrivate::isProcessRunning(qint64 pid, const QString &appname)
 {
+#if !defined(Q_OS_WASI)
     if (::kill(pid_t(pid), 0) == -1 && errno == ESRCH)
         return false; // PID doesn't exist anymore
+#endif
 
     const QString processName = processNameByPid(pid);
     if (!processName.isEmpty()) {

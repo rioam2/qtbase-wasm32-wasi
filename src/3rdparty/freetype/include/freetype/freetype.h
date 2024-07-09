@@ -2343,7 +2343,11 @@ FT_BEGIN_HEADER
    *   variable to control driver properties.  See section @properties for
    *   more.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Init_FreeType( FT_Library  *alibrary );
 
 
@@ -2363,7 +2367,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Done_FreeType( FT_Library  library );
 
 
@@ -2566,7 +2574,11 @@ FT_BEGIN_HEADER
    *   Use @FT_Done_Face to destroy the created @FT_Face object (along with
    *   its slot and sizes).
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_New_Face( FT_Library   library,
                const char*  filepathname,
                FT_Long      face_index,
@@ -2606,7 +2618,11 @@ FT_BEGIN_HEADER
    * @note:
    *   You must not deallocate the memory before calling @FT_Done_Face.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_New_Memory_Face( FT_Library      library,
                       const FT_Byte*  file_base,
                       FT_Long         file_size,
@@ -2755,7 +2771,11 @@ FT_BEGIN_HEADER
    *     } while ( face_idx < num_faces )
    *   ```
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Open_Face( FT_Library           library,
                 const FT_Open_Args*  args,
                 FT_Long              face_index,
@@ -2781,7 +2801,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Attach_File( FT_Face      face,
                   const char*  filepathname );
 
@@ -2817,7 +2841,11 @@ FT_BEGIN_HEADER
    *   invoking this function.  Most drivers simply do not implement file or
    *   stream attachments.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Attach_Stream( FT_Face              face,
                     const FT_Open_Args*  parameters );
 
@@ -2847,7 +2875,11 @@ FT_BEGIN_HEADER
    *   2.4.2
    *
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Reference_Face( FT_Face  face );
 
 
@@ -2871,7 +2903,11 @@ FT_BEGIN_HEADER
    *   See the discussion of reference counters in the description of
    *   @FT_Reference_Face.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Done_Face( FT_Face  face );
 
 
@@ -2918,7 +2954,11 @@ FT_BEGIN_HEADER
    *
    *   Don't use this function if you are using the FreeType cache API.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Select_Size( FT_Face  face,
                   FT_Int   strike_index );
 
@@ -3082,7 +3122,11 @@ FT_BEGIN_HEADER
    *
    *   Don't use this function if you are using the FreeType cache API.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Request_Size( FT_Face          face,
                    FT_Size_Request  req );
 
@@ -3131,7 +3175,11 @@ FT_BEGIN_HEADER
    *
    *   Don't use this function if you are using the FreeType cache API.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Set_Char_Size( FT_Face     face,
                     FT_F26Dot6  char_width,
                     FT_F26Dot6  char_height,
@@ -3168,7 +3216,11 @@ FT_BEGIN_HEADER
    *
    *   Don't use this function if you are using the FreeType cache API.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Set_Pixel_Sizes( FT_Face  face,
                       FT_UInt  pixel_width,
                       FT_UInt  pixel_height );
@@ -3223,7 +3275,11 @@ FT_BEGIN_HEADER
    *   at EM size, then scale it manually and fill it as a graphics
    *   operation.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Load_Glyph( FT_Face   face,
                  FT_UInt   glyph_index,
                  FT_Int32  load_flags );
@@ -3273,7 +3329,11 @@ FT_BEGIN_HEADER
    *   to @FT_Get_Char_Index is omitted, and the function behaves identically
    *   to @FT_Load_Glyph.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Load_Char( FT_Face   face,
                 FT_ULong  char_code,
                 FT_Int32  load_flags );
@@ -3972,7 +4032,11 @@ FT_BEGIN_HEADER
    *   3~times per pixel: red foreground subpixel to red background subpixel
    *   and so on for green and blue.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Render_Glyph( FT_GlyphSlot    slot,
                    FT_Render_Mode  render_mode );
 
@@ -4062,7 +4126,11 @@ FT_BEGIN_HEADER
    *   supported; use @FT_HAS_KERNING to find out whether a font has data
    *   that can be extracted with `FT_Get_Kerning`.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_Kerning( FT_Face     face,
                   FT_UInt     left_glyph,
                   FT_UInt     right_glyph,
@@ -4106,7 +4174,11 @@ FT_BEGIN_HEADER
    *   Only very few AFM files come with track kerning data; please refer to
    *   Adobe's AFM specification for more details.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_Track_Kerning( FT_Face    face,
                         FT_Fixed   point_size,
                         FT_Int     degree,
@@ -4150,7 +4222,11 @@ FT_BEGIN_HEADER
    *   preferred to a UCS-2 cmap).  It is thus preferable to @FT_Set_Charmap
    *   in this case.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Select_Charmap( FT_Face      face,
                      FT_Encoding  encoding );
 
@@ -4181,7 +4257,11 @@ FT_BEGIN_HEADER
    *   It also fails if an OpenType type~14 charmap is selected (which
    *   doesn't map character codes to glyph indices at all).
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Set_Charmap( FT_Face     face,
                   FT_CharMap  charmap );
 
@@ -4435,7 +4515,11 @@ FT_BEGIN_HEADER
    *   2.8
    *
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Face_Properties( FT_Face        face,
                       FT_UInt        num_properties,
                       FT_Parameter*  properties );
@@ -4524,7 +4608,11 @@ FT_BEGIN_HEADER
    *   It then works only for fonts that actually embed glyph names (which
    *   many recent OpenType fonts do not).
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_Glyph_Name( FT_Face     face,
                      FT_UInt     glyph_index,
                      FT_Pointer  buffer,
@@ -4644,7 +4732,11 @@ FT_BEGIN_HEADER
    *     https://docs.microsoft.com/en-us/typography/opentype/spec/glyf#composite-glyph-description
    *
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_SubGlyph_Info( FT_GlyphSlot  glyph,
                         FT_UInt       sub_index,
                         FT_Int       *p_index,

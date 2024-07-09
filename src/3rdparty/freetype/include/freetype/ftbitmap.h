@@ -108,7 +108,11 @@ FT_BEGIN_HEADER
    *   `source->buffer` and `target->buffer` must neither be equal nor
    *   overlap.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Bitmap_Copy( FT_Library        library,
                   const FT_Bitmap  *source,
                   FT_Bitmap        *target );
@@ -153,7 +157,11 @@ FT_BEGIN_HEADER
    *   Bitmaps in @FT_PIXEL_MODE_GRAY2 and @FT_PIXEL_MODE_GRAY@ format are
    *   converted to @FT_PIXEL_MODE_GRAY format (i.e., 8bpp).
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Bitmap_Embolden( FT_Library  library,
                       FT_Bitmap*  bitmap,
                       FT_Pos      xStrength,
@@ -200,7 +208,11 @@ FT_BEGIN_HEADER
    *   `source->buffer` and `target->buffer` must neither be equal nor
    *   overlap.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Bitmap_Convert( FT_Library        library,
                      const FT_Bitmap  *source,
                      FT_Bitmap        *target,
@@ -260,7 +272,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.10
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Bitmap_Blend( FT_Library         library,
                    const FT_Bitmap*   source,
                    const FT_Vector    source_offset,
@@ -287,7 +303,11 @@ FT_BEGIN_HEADER
    * @note:
    *   This function is to be used in combination with @FT_Bitmap_Embolden.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_GlyphSlot_Own_Bitmap( FT_GlyphSlot  slot );
 
 
@@ -313,7 +333,11 @@ FT_BEGIN_HEADER
    *   The `library` argument is taken to have access to FreeType's memory
    *   handling functions.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Bitmap_Done( FT_Library  library,
                   FT_Bitmap  *bitmap );
 

@@ -751,7 +751,11 @@ FT_BEGIN_HEADER
    *   size (e.g. 32bit vs. 64bit) or order (big endian vs. little endian).
    *
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Load_Sfnt_Table( FT_Face    face,
                       FT_ULong   tag,
                       FT_Long    offset,
@@ -794,7 +798,11 @@ FT_BEGIN_HEADER
    *   missing.
    *
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Sfnt_Table_Info( FT_Face    face,
                       FT_UInt    table_index,
                       FT_ULong  *tag,

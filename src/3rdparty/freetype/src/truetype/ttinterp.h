@@ -453,7 +453,11 @@ FT_BEGIN_HEADER
    *   This function is publicly exported because it is directly
    *   invoked by the TrueType debugger.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   TT_RunIns( void*  exec );
 
 

@@ -33,6 +33,7 @@
 
   /* documentation is in ftgxval.h */
 
+#if !defined(__wasi__)
   FT_EXPORT_DEF( FT_Error )
   FT_TrueTypeGX_Validate( FT_Face   face,
                           FT_UInt   validation_flags,
@@ -68,6 +69,7 @@
   Exit:
     return error;
   }
+#endif
 
 
   FT_EXPORT_DEF( void )
@@ -86,6 +88,7 @@
   }
 
 
+#if !defined(__wasi__)
   FT_EXPORT_DEF( FT_Error )
   FT_ClassicKern_Validate( FT_Face    face,
                            FT_UInt    validation_flags,
@@ -119,6 +122,7 @@
   Exit:
     return error;
   }
+#endif
 
 
   FT_EXPORT_DEF( void )

@@ -644,7 +644,7 @@ if(GCC)
                                 PROPERTIES COMPILE_OPTIONS "-fno-lto")
 endif()
 
-qt_internal_extend_target(Core CONDITION UNIX
+qt_internal_extend_target(Core CONDITION (UNIX OR WASI)
     SOURCES
         io/qfilesystemengine_unix.cpp
         io/qfilesystemiterator_unix.cpp
@@ -668,7 +668,7 @@ qt_internal_extend_target(Core CONDITION QT_FEATURE_thread
         thread/qthreadstorage.cpp
 )
 
-qt_internal_extend_target(Core CONDITION QT_FEATURE_thread AND UNIX
+qt_internal_extend_target(Core CONDITION QT_FEATURE_thread AND (UNIX OR WASI)
     SOURCES
         thread/qwaitcondition_unix.cpp
 )
@@ -678,7 +678,7 @@ qt_internal_extend_target(Core CONDITION APPLE AND QT_FEATURE_thread
         thread/qmutex_mac.cpp
 )
 
-qt_internal_extend_target(Core CONDITION QT_FEATURE_thread AND UNIX AND NOT APPLE AND NOT LINUX
+qt_internal_extend_target(Core CONDITION QT_FEATURE_thread AND (UNIX OR WASI) AND NOT APPLE AND NOT LINUX
     SOURCES
         thread/qmutex_unix.cpp
 )
@@ -761,7 +761,7 @@ qt_internal_extend_target(Core CONDITION QT_FEATURE_easingcurve
         tools/qtimeline.cpp tools/qtimeline.h
 )
 
-qt_internal_extend_target(Core CONDITION UNIX AND NOT HAIKU AND NOT INTEGRITY AND NOT VXWORKS AND NOT WASM AND NOT MACOS
+qt_internal_extend_target(Core CONDITION (UNIX OR WASI) AND NOT HAIKU AND NOT INTEGRITY AND NOT VXWORKS AND NOT WASM AND NOT MACOS
     LIBRARIES
         m
 )
@@ -771,7 +771,7 @@ qt_internal_extend_target(Core CONDITION APPLE
         text/qlocale_mac.mm
 )
 
-qt_internal_extend_target(Core CONDITION UNIX AND NOT APPLE
+qt_internal_extend_target(Core CONDITION (UNIX OR WASI) AND NOT APPLE
     SOURCES
         text/qlocale_unix.cpp
 )
@@ -805,7 +805,7 @@ qt_internal_extend_target(Core CONDITION MACOS AND NOT QT_FEATURE_icu
         text/qcollator_macx.cpp
 )
 
-qt_internal_extend_target(Core CONDITION UNIX AND NOT MACOS AND NOT QT_FEATURE_icu
+qt_internal_extend_target(Core CONDITION (UNIX OR WASI) AND NOT MACOS AND NOT QT_FEATURE_icu
     SOURCES
         text/qcollator_posix.cpp
 )
@@ -855,12 +855,12 @@ qt_internal_extend_target(Core CONDITION QT_FEATURE_timezone AND ANDROID AND NOT
         time/qtimezoneprivate_android.cpp
 )
 
-qt_internal_extend_target(Core CONDITION QT_FEATURE_timezone AND UNIX AND NOT ANDROID AND NOT APPLE
+qt_internal_extend_target(Core CONDITION QT_FEATURE_timezone AND (UNIX OR WASI) AND NOT ANDROID AND NOT APPLE
     SOURCES
         time/qtimezoneprivate_tz.cpp
 )
 
-qt_internal_extend_target(Core CONDITION QT_FEATURE_icu AND QT_FEATURE_timezone AND UNIX AND NOT ANDROID AND NOT APPLE
+qt_internal_extend_target(Core CONDITION QT_FEATURE_icu AND QT_FEATURE_timezone AND (UNIX OR WASI) AND NOT ANDROID AND NOT APPLE
     SOURCES
         time/qtimezoneprivate_icu.cpp
 )
@@ -901,12 +901,12 @@ qt_internal_extend_target(Core CONDITION MACOS AND QT_FEATURE_filesystemwatcher
         io/qfilesystemwatcher_fsevents.mm io/qfilesystemwatcher_fsevents_p.h
 )
 
-qt_internal_extend_target(Core CONDITION QT_FEATURE_filesystemwatcher AND QT_FEATURE_inotify AND UNIX AND NOT MACOS
+qt_internal_extend_target(Core CONDITION QT_FEATURE_filesystemwatcher AND QT_FEATURE_inotify AND (UNIX OR WASI) AND NOT MACOS
     SOURCES
         io/qfilesystemwatcher_inotify.cpp io/qfilesystemwatcher_inotify_p.h
 )
 
-qt_internal_extend_target(Core CONDITION QT_FEATURE_filesystemwatcher AND UNIX AND NOT MACOS AND NOT QT_FEATURE_inotify AND (APPLE OR FREEBSD OR NETBSD OR OPENBSD)
+qt_internal_extend_target(Core CONDITION QT_FEATURE_filesystemwatcher AND (UNIX OR WASI) AND NOT MACOS AND NOT QT_FEATURE_inotify AND (APPLE OR FREEBSD OR NETBSD OR OPENBSD)
     SOURCES
         io/qfilesystemwatcher_kqueue.cpp io/qfilesystemwatcher_kqueue_p.h
 )
@@ -921,7 +921,7 @@ qt_internal_extend_target(Core CONDITION QT_FEATURE_processenvironment AND WIN32
         io/qprocess_win.cpp
 )
 
-qt_internal_extend_target(Core CONDITION QT_FEATURE_processenvironment AND UNIX
+qt_internal_extend_target(Core CONDITION QT_FEATURE_processenvironment AND (UNIX OR WASI)
     SOURCES
         io/qprocess_unix.cpp
 )
@@ -951,7 +951,7 @@ qt_internal_extend_target(Core CONDITION QT_FEATURE_filesystemiterator AND WIN32
         io/qfilesystemiterator_win.cpp
 )
 
-qt_internal_extend_target(Core CONDITION QT_FEATURE_process AND UNIX
+qt_internal_extend_target(Core CONDITION QT_FEATURE_process AND (UNIX OR WASI)
     SOURCES
         ../3rdparty/forkfd/forkfd.h
         io/forkfd_qt.cpp
@@ -1004,7 +1004,7 @@ qt_internal_extend_target(Core CONDITION HAIKU AND NOT ANDROID
         be
 )
 
-qt_internal_extend_target(Core CONDITION UNIX AND NOT APPLE AND NOT HAIKU AND NOT ANDROID
+qt_internal_extend_target(Core CONDITION (UNIX OR WASI) AND NOT APPLE AND NOT HAIKU AND NOT ANDROID
     SOURCES
         io/qstandardpaths_unix.cpp
         io/qstorageinfo_unix.cpp
@@ -1060,7 +1060,7 @@ qt_internal_extend_target(Core CONDITION QT_FEATURE_library AND APPLE
         plugin/qlibrary_unix.cpp
         plugin/qmachparser.cpp plugin/qmachparser_p.h
 )
-qt_internal_extend_target(Core CONDITION QT_FEATURE_library AND UNIX AND NOT APPLE
+qt_internal_extend_target(Core CONDITION QT_FEATURE_library AND (UNIX OR WASI) AND NOT APPLE
     SOURCES
         plugin/qelfparser_p.cpp plugin/qelfparser_p.h
         plugin/qlibrary_unix.cpp
@@ -1081,12 +1081,12 @@ qt_internal_extend_target(Core CONDITION WATCHOS
         ${FWWatchKit}
 )
 
-qt_internal_extend_target(Core CONDITION QT_FEATURE_poll_select AND UNIX
+qt_internal_extend_target(Core CONDITION QT_FEATURE_poll_select AND (UNIX OR WASI)
     SOURCES
         kernel/qpoll.cpp
 )
 
-qt_internal_extend_target(Core CONDITION QT_FEATURE_glib AND UNIX
+qt_internal_extend_target(Core CONDITION QT_FEATURE_glib AND (UNIX OR WASI)
     SOURCES
         kernel/qeventdispatcher_glib.cpp kernel/qeventdispatcher_glib_p.h
     LIBRARIES
@@ -1098,7 +1098,7 @@ qt_internal_extend_target(Core CONDITION QT_FEATURE_clock_gettime
         WrapRt::WrapRt
 )
 
-qt_internal_extend_target(Core CONDITION QT_FEATURE_posix_shm AND UNIX
+qt_internal_extend_target(Core CONDITION QT_FEATURE_posix_shm AND (UNIX OR WASI)
     SOURCES
         ipc/qsharedmemory_posix.cpp
     LIBRARIES

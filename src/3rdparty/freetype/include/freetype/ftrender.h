@@ -227,7 +227,11 @@ FT_BEGIN_HEADER
    *   Currently, no FreeType renderer module uses `parameters`; you should
    *   thus always pass `NULL` as the value.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Set_Renderer( FT_Library     library,
                    FT_Renderer    renderer,
                    FT_UInt        num_params,
