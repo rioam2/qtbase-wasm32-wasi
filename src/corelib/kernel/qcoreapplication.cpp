@@ -448,7 +448,7 @@ QCoreApplicationPrivate::QCoreApplicationPrivate(int &aargc, char **aargv)
 #ifndef QT_NO_QOBJECT
     QCoreApplicationPrivate::is_app_closing = false;
 
-#  if defined(Q_OS_UNIX)
+#  if defined(Q_OS_UNIX) && !defined(Q_OS_WASI)
     if (Q_UNLIKELY(!setuidAllowed && (geteuid() != getuid())))
         qFatal("FATAL: The application binary appears to be running setuid, this is a security hole.");
 #  endif // Q_OS_UNIX
@@ -603,7 +603,7 @@ void QCoreApplicationPrivate::initLocale()
 {
 #if defined(QT_BOOTSTRAPPED)
     // Don't try to control bootstrap library locale or encoding.
-#elif defined(Q_OS_UNIX)
+#elif defined(Q_OS_UNIX) || defined(Q_OS_WASI)
     Q_CONSTINIT static bool qt_locale_initialized = false;
     if (qt_locale_initialized)
         return;
@@ -616,7 +616,7 @@ void QCoreApplicationPrivate::initLocale()
 
     // Next, let's ensure that LC_CTYPE is UTF-8, since QStringConverter's
     // QLocal8Bit hard-codes this, and we need to be consistent.
-#  if defined(Q_OS_INTEGRITY)
+#  if defined(Q_OS_INTEGRITY) | defined(Q_OS_WASI)
     setlocale(LC_CTYPE, "UTF-8");
 #  elif defined(Q_OS_QNX)
     // QNX has no nl_langinfo, so we can't check.
@@ -2407,6 +2407,8 @@ static QString qAppFileName()
 {
 #  if defined(Q_OS_ANDROID)
     // the actual process on Android is the Java VM, so this doesn't help us
+    return QString();
+#  elif defined(Q_OS_WASI)
     return QString();
 #  elif defined(Q_OS_LINUX)
     // this includes the Embedded Android builds
