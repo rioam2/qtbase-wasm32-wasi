@@ -1,0 +1,48 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  build:
+    name: 'Build'
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        shell: bash
+        run: ./build.docker.sh
+
+      - name: print logfiles and other info in case of failure
+        if: ${{ failure() }}
+        run: |
+          echo ==== CMakeOutput.log ====
+          cat build/CMakeFiles/CMakeOutput.log
+          echo
+          echo ==== CMakeError.log ====
+          cat build/CMakeFiles/CMakeError.log
+          echo ==== CMakeCache.txt ====
+          cat build/CMakeCache.txt
+      
+      - name: Upload linux x86_64 install directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: qtbase-x86_64-linux-install
+          path: build/host-install/
+      
+      - name: Upload wasm32-wasi install directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: qtbase-wasm32-wasi-install
+          path: build/wasm32-wasi-install/
+
+      - name: Upload wasm32-wasi static library
+        uses: actions/upload-artifact@v4
+        with:
+          name: qtbase-wasm32-wasi-6.1.1.a
+          path: build/wasm32-wasi/qtbase-6.1.1.a
