@@ -207,7 +207,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.10
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Palette_Data_Get( FT_Face           face,
                        FT_Palette_Data  *apalette );
 
@@ -260,7 +264,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.10
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Palette_Select( FT_Face     face,
                      FT_UShort   palette_index,
                      FT_Color*  *apalette );
@@ -298,7 +306,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.10
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Palette_Set_Foreground_Color( FT_Face   face,
                                    FT_Color  foreground_color );
 

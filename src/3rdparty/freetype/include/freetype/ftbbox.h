@@ -81,7 +81,11 @@ FT_BEGIN_HEADER
    *   and scale the subglyphs), then extracting the BBox, which can be
    *   eventually converted back to font units.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Outline_Get_BBox( FT_Outline*  outline,
                        FT_BBox     *abbox );
 

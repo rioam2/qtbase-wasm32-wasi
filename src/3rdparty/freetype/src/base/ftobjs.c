@@ -157,7 +157,7 @@
     return -1;
   }
 
-
+#if !defined(__wasi__)
   FT_BASE_DEF( void )
   ft_validator_error( FT_Validator  valid,
                       FT_Error      error )
@@ -174,6 +174,7 @@
     /* compiler may warn about an unused local variable   */
     ft_longjmp( *(ft_jmp_buf*) jump_buffer, 1 );
   }
+#endif
 
 
   /*************************************************************************/

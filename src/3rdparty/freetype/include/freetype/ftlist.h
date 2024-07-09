@@ -219,7 +219,11 @@ FT_BEGIN_HEADER
    * @return:
    *   The result (a FreeType error code) of the last iterator call.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_List_Iterate( FT_List           list,
                    FT_List_Iterator  iterator,
                    void*             user );

@@ -40,21 +40,24 @@ FT_BEGIN_HEADER
 
   typedef const struct TT_CMap_ClassRec_*  TT_CMap_Class;
 
-
+#if !defined(__wasi__)
   typedef FT_Error
   (*TT_CMap_ValidateFunc)( FT_Byte*      data,
                            FT_Validator  valid );
+#endif
 
   typedef struct  TT_CMap_ClassRec_
   {
     FT_CMap_ClassRec      clazz;
     FT_UInt               format;
+#if !defined(__wasi__)
     TT_CMap_ValidateFunc  validate;
+#endif
     TT_CMap_Info_GetFunc  get_cmap_info;
 
   } TT_CMap_ClassRec;
 
-
+#if !defined(__wasi__)
 #define FT_DEFINE_TT_CMAP( class_,             \
                            size_,              \
                            init_,              \
@@ -88,6 +91,39 @@ FT_BEGIN_HEADER
     validate_,                                 \
     get_cmap_info_                             \
   };
+#else
+#define FT_DEFINE_TT_CMAP( class_,             \
+                           size_,              \
+                           init_,              \
+                           done_,              \
+                           char_index_,        \
+                           char_next_,         \
+                           char_var_index_,    \
+                           char_var_default_,  \
+                           variant_list_,      \
+                           charvariant_list_,  \
+                           variantchar_list_,  \
+                           format_,            \
+                           get_cmap_info_ )    \
+  FT_CALLBACK_TABLE_DEF                        \
+  const TT_CMap_ClassRec  class_ =             \
+  {                                            \
+    { size_,                                   \
+      init_,                                   \
+      done_,                                   \
+      char_index_,                             \
+      char_next_,                              \
+      char_var_index_,                         \
+      char_var_default_,                       \
+      variant_list_,                           \
+      charvariant_list_,                       \
+      variantchar_list_                        \
+    },                                         \
+                                               \
+    format_,                                   \
+    get_cmap_info_                             \
+  };
+#endif
 
 
 #undef  TTCMAPCITEM
@@ -97,7 +133,9 @@ FT_BEGIN_HEADER
 
   typedef struct  TT_ValidatorRec_
   {
+#if !defined(__wasi__)
     FT_ValidatorRec  validator;
+#endif
     FT_UInt          num_glyphs;
 
   } TT_ValidatorRec, *TT_Validator;

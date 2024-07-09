@@ -87,7 +87,11 @@ FT_BEGIN_HEADER
    *   This function may return `FT_Err_Unimplemented_Feature` if your build
    *   of FreeType was not compiled with zlib support.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Stream_OpenGzip( FT_Stream  stream,
                       FT_Stream  source );
 
@@ -133,7 +137,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.5.1
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Gzip_Uncompress( FT_Memory       memory,
                       FT_Byte*        output,
                       FT_ULong*       output_len,

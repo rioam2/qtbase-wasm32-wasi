@@ -52,7 +52,7 @@
 #include <sys/pstat.h>
 #endif
 
-#if defined(Q_OS_LINUX) && !defined(QT_LINUXBASE)
+#if defined(Q_OS_LINUX) && !defined(QT_LINUXBASE) && !defined(Q_OS_WASI)
 #include <sys/prctl.h>
 #endif
 

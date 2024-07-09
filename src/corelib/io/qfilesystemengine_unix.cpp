@@ -17,7 +17,9 @@
 # include <QtCore/qstandardpaths.h>
 #endif // QT_BOOTSTRAPPED
 
+#if !defined(Q_OS_WASI)
 #include <pwd.h>
+#endif
 #include <stdlib.h> // for realpath()
 #include <unistd.h>
 #include <stdio.h>
@@ -57,8 +59,10 @@ extern "C" NSString *NSTemporaryDirectory();
 
 #if defined(Q_OS_LINUX)
 #  include <sys/ioctl.h>
-#  include <sys/sendfile.h>
-#  include <linux/fs.h>
+#  if !defined(Q_OS_WASI)
+#    include <sys/sendfile.h>
+#    include <linux/fs.h>
+#  endif
 
 // in case linux/fs.h is too old and doesn't define it:
 #ifndef FICLONE
@@ -528,6 +532,7 @@ void QFileSystemMetaData::fillFromDirEnt(const QT_DIRENT &entry)
 
     case DT_CHR:
     case DT_FIFO:
+#if !defined(Q_OS_WASI)
     case DT_SOCK:
         // ### System attribute
         knownFlagsMask = QFileSystemMetaData::LinkType
@@ -542,6 +547,7 @@ void QFileSystemMetaData::fillFromDirEnt(const QT_DIRENT &entry)
             | QFileSystemMetaData::ExistsAttribute;
 
         break;
+#endif
 
     case DT_LNK:
         knownFlagsMask = QFileSystemMetaData::LinkType;
@@ -677,7 +683,7 @@ QFileSystemEntry QFileSystemEngine::canonicalName(const QFileSystemEntry &entry,
         errno = ENOENT;
     else
         resolved_name.reset(realpath(entry.nativeFilePath().constData(), stack_result));
-# else
+# elif !defined(Q_OS_WASI)
     resolved_name.reset(realpath(entry.nativeFilePath().constData(), stack_result));
 # endif
     if (resolved_name) {
@@ -763,6 +769,10 @@ QByteArray QFileSystemEngine::id(int fd)
 //static
 QString QFileSystemEngine::resolveUserName(uint userId)
 {
+#if defined(Q_OS_WASI)
+    Q_UNUSED(userId)
+    return QString();
+#else
 #if QT_CONFIG(thread) && defined(_POSIX_THREAD_SAFE_FUNCTIONS) && !defined(Q_OS_OPENBSD)
     long size_max = sysconf(_SC_GETPW_R_SIZE_MAX);
     if (size_max == -1)
@@ -784,11 +794,16 @@ QString QFileSystemEngine::resolveUserName(uint userId)
     Q_UNUSED(userId);
 #endif
     return QString();
+#endif
 }
 
 //static
 QString QFileSystemEngine::resolveGroupName(uint groupId)
 {
+#if defined(Q_OS_WASI)
+    Q_UNUSED(groupId)
+    return QString();
+#else
 #if QT_CONFIG(thread) && defined(_POSIX_THREAD_SAFE_FUNCTIONS) && !defined(Q_OS_OPENBSD)
     long size_max = sysconf(_SC_GETPW_R_SIZE_MAX);
     if (size_max == -1)
@@ -823,6 +838,7 @@ QString QFileSystemEngine::resolveGroupName(uint groupId)
     Q_UNUSED(groupId);
 #endif
     return QString();
+#endif
 }
 
 #if defined(Q_OS_DARWIN)
@@ -889,6 +905,7 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
         struct statx statxBuffer;
     };
     int statResult = -1;
+#if !defined(Q_OS_WASI)
     if (what & QFileSystemMetaData::LinkType) {
         mode_t mode = 0;
         statResult = qt_lstatx(nativeFilePath, &statxBuffer);
@@ -925,6 +942,7 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
 
         data.knownFlagsMask |= QFileSystemMetaData::LinkType;
     }
+#endif
 
     // second, we try a regular stat(2)
     if (statResult == -1 && (what & QFileSystemMetaData::PosixStatFlags)) {
@@ -957,6 +975,7 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
             | QFileSystemMetaData::ExistsAttribute;
     }
 
+#if !defined(Q_OS_WASI)
     // third, we try access(2)
     if (what & (QFileSystemMetaData::UserPermissions | QFileSystemMetaData::ExistsAttribute)) {
         // calculate user permissions
@@ -986,6 +1005,7 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
         data.knownFlagsMask |= (what & QFileSystemMetaData::UserPermissions) |
                 QFileSystemMetaData::ExistsAttribute;
     }
+#endif
 
 #if defined(Q_OS_DARWIN)
     if (what & QFileSystemMetaData::AliasType) {
@@ -1042,7 +1062,7 @@ bool QFileSystemEngine::cloneFile(int srcfd, int dstfd, const QFileSystemMetaDat
         return false;
     }
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) && !defined(Q_OS_WASI)
     // first, try FICLONE (only works on regular files and only on certain fs)
     if (::ioctl(dstfd, FICLONE, srcfd) == 0)
         return true;
@@ -1186,6 +1206,12 @@ bool QFileSystemEngine::createLink(const QFileSystemEntry &source, const QFileSy
 #ifndef QT_BOOTSTRAPPED
 static QString freeDesktopTrashLocation(const QString &sourcePath)
 {
+    QString trash;
+
+#if defined(Q_OS_WASI)
+    Q_UNUSED(sourcePath)
+    return trash;
+#else
     auto makeTrashDir = [](const QDir &topDir, const QString &trashDir = QString()) {
         auto ownerPerms = QFileDevice::ReadOwner
                         | QFileDevice::WriteOwner
@@ -1201,7 +1227,6 @@ static QString freeDesktopTrashLocation(const QString &sourcePath)
         return QString();
     };
 
-    QString trash;
     const QStorageInfo sourceStorage(sourcePath);
     const QStorageInfo homeStorage(QDir::home());
     // We support trashing of files outside the users home partition
@@ -1275,8 +1300,8 @@ static QString freeDesktopTrashLocation(const QString &sourcePath)
                      topDir.path().toLocal8Bit().constData());
         }
     }
-
     return trash;
+#endif
 }
 #endif // QT_BOOTSTRAPPED
 
@@ -1503,7 +1528,13 @@ bool QFileSystemEngine::setPermissions(const QFileSystemEntry &entry, QFile::Per
     Q_CHECK_FILE_NAME(entry, false);
 
     mode_t mode = QtPrivate::toMode_t(permissions);
+#if defined(Q_OS_WASI)
+    Q_UNUSED(entry)
+    Q_UNUSED(mode)
+    bool success = false;
+#else
     bool success = ::chmod(entry.nativeFilePath().constData(), mode) == 0;
+#endif
     if (success && data) {
         data->entryFlags &= ~QFileSystemMetaData::Permissions;
         data->entryFlags |= QFileSystemMetaData::MetaDataFlag(uint(permissions.toInt()));
@@ -1519,7 +1550,13 @@ bool QFileSystemEngine::setPermissions(int fd, QFile::Permissions permissions, Q
 {
     mode_t mode = QtPrivate::toMode_t(permissions);
 
+#if defined(Q_OS_WASI)
+    Q_UNUSED(fd)
+    Q_UNUSED(mode)
+    bool success = false;
+#else
     bool success = ::fchmod(fd, mode) == 0;
+#endif
     if (success && data) {
         data->entryFlags &= ~QFileSystemMetaData::Permissions;
         data->entryFlags |= QFileSystemMetaData::MetaDataFlag(uint(permissions.toInt()));

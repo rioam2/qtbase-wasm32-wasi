@@ -594,7 +594,11 @@
 
   /* documentation is in ftglyph.h */
 
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_New_Glyph( FT_Library       library,
                 FT_Glyph_Format  format,
                 FT_Glyph        *aglyph )

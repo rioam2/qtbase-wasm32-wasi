@@ -99,7 +99,11 @@ FT_BEGIN_HEADER
    *     error = FT_New_Face_From_FOND( library, fond, 0, &face );
    *   ```
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_New_Face_From_FOND( FT_Library  library,
                          Handle      fond,
                          FT_Long     face_index,
@@ -129,7 +133,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_GetFile_From_Mac_Name( const char*  fontName,
                             FSSpec*      pathSpec,
                             FT_Long*     face_index )
@@ -158,7 +166,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_GetFile_From_Mac_ATS_Name( const char*  fontName,
                                 FSSpec*      pathSpec,
                                 FT_Long*     face_index )
@@ -192,7 +204,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_GetFilePath_From_Mac_ATS_Name( const char*  fontName,
                                     UInt8*       path,
                                     UInt32       maxPathSize,
@@ -231,7 +247,11 @@ FT_BEGIN_HEADER
    *   @FT_New_Face_From_FSSpec is identical to @FT_New_Face except it
    *   accepts an FSSpec instead of a path.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_New_Face_From_FSSpec( FT_Library     library,
                            const FSSpec  *spec,
                            FT_Long        face_index,
@@ -270,7 +290,11 @@ FT_BEGIN_HEADER
    *   @FT_New_Face_From_FSRef is identical to @FT_New_Face except it accepts
    *   an FSRef instead of a path.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_New_Face_From_FSRef( FT_Library    library,
                           const FSRef  *ref,
                           FT_Long       face_index,

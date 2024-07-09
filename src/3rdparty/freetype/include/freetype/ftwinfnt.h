@@ -256,7 +256,11 @@ FT_BEGIN_HEADER
    *   This function only works with Windows FNT faces, returning an error
    *   otherwise.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_WinFNT_Header( FT_Face               face,
                         FT_WinFNT_HeaderRec  *aheader );
 

@@ -177,7 +177,11 @@ FT_BEGIN_HEADER
    *   This function always returns an error if the config macro
    *   `TT_CONFIG_OPTION_SFNT_NAMES` is not defined in `ftoption.h`.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_Sfnt_Name( FT_Face       face,
                     FT_UInt       idx,
                     FT_SfntName  *aname );
@@ -255,7 +259,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.8
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_Sfnt_LangTag( FT_Face          face,
                        FT_UInt          langID,
                        FT_SfntLangTag  *alangTag );

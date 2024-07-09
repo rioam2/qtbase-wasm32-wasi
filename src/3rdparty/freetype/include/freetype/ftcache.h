@@ -310,7 +310,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FTC_Manager_New( FT_Library          library,
                    FT_UInt             max_faces,
                    FT_UInt             max_sizes,
@@ -396,7 +400,11 @@ FT_BEGIN_HEADER
    *   been completely flushed, and still no memory was available for the
    *   operation.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FTC_Manager_LookupFace( FTC_Manager  manager,
                           FTC_FaceID   face_id,
                           FT_Face     *aface );
@@ -500,7 +508,11 @@ FT_BEGIN_HEADER
    *   been completely flushed, and still no memory is available for the
    *   operation.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FTC_Manager_LookupSize( FTC_Manager  manager,
                           FTC_Scaler   scaler,
                           FT_Size     *asize );
@@ -597,7 +609,11 @@ FT_BEGIN_HEADER
    *   manager.
    *
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FTC_CMapCache_New( FTC_Manager     manager,
                      FTC_CMapCache  *acache );
 
@@ -732,7 +748,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FTC_ImageCache_New( FTC_Manager      manager,
                       FTC_ImageCache  *acache );
 
@@ -781,7 +801,11 @@ FT_BEGIN_HEADER
    *   to one of the caching sub-system APIs.  Don't assume that it is
    *   persistent!
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FTC_ImageCache_Lookup( FTC_ImageCache  cache,
                          FTC_ImageType   type,
                          FT_UInt         gindex,
@@ -840,7 +864,11 @@ FT_BEGIN_HEADER
    *   Calls to @FT_Set_Char_Size and friends have no effect on cached
    *   glyphs; you should always use the FreeType cache API instead.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FTC_ImageCache_LookupScaler( FTC_ImageCache  cache,
                                FTC_Scaler      scaler,
                                FT_ULong        load_flags,
@@ -954,7 +982,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FTC_SBitCache_New( FTC_Manager     manager,
                      FTC_SBitCache  *acache );
 
@@ -1008,7 +1040,11 @@ FT_BEGIN_HEADER
    *   one of the caching sub-system APIs.  Don't assume that it is
    *   persistent!
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FTC_SBitCache_Lookup( FTC_SBitCache    cache,
                         FTC_ImageType    type,
                         FT_UInt          gindex,
@@ -1068,7 +1104,11 @@ FT_BEGIN_HEADER
    *   one of the caching sub-system APIs.  Don't assume that it is
    *   persistent!
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FTC_SBitCache_LookupScaler( FTC_SBitCache  cache,
                               FTC_Scaler     scaler,
                               FT_ULong       load_flags,

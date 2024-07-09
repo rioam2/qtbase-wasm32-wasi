@@ -162,8 +162,9 @@
    *
    */
 
-
+#if !defined(__wasi__)
 #include <setjmp.h>
+#endif
 
 #define ft_jmp_buf     jmp_buf  /* note: this cannot be a typedef since  */
                                 /*       `jmp_buf` is defined as a macro */

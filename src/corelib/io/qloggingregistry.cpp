@@ -270,6 +270,10 @@ static QList<QLoggingRule> loadRulesFromFile(const QString &filePath)
  */
 void QLoggingRegistry::initializeRules()
 {
+#if defined(Q_OS_WASI)
+    return;
+#endif
+    
     QList<QLoggingRule> er, qr, cr;
     // get rules from environment
     const QByteArray rulesFilePath = qgetenv("QT_LOGGING_CONF");

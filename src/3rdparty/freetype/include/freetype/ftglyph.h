@@ -334,7 +334,11 @@ FT_BEGIN_HEADER
    * @since:
    *   2.10
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_New_Glyph( FT_Library       library,
                 FT_Glyph_Format  format,
                 FT_Glyph         *aglyph );
@@ -365,7 +369,11 @@ FT_BEGIN_HEADER
    *   fixed-point numbers, `slot->advance.x` and `slot->advance.y` (which
    *   are in 26.6 fixed-point format) must be in the range ]-32768;32768[.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_Glyph( FT_GlyphSlot  slot,
                 FT_Glyph     *aglyph );
 
@@ -390,7 +398,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Glyph_Copy( FT_Glyph   source,
                  FT_Glyph  *target );
 
@@ -422,7 +434,11 @@ FT_BEGIN_HEADER
    *   The 2x2 transformation matrix is also applied to the glyph's advance
    *   vector.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Glyph_Transform( FT_Glyph          glyph,
                       const FT_Matrix*  matrix,
                       const FT_Vector*  delta );
@@ -654,7 +670,11 @@ FT_BEGIN_HEADER
    *       FT_Done_Glyph( glyphs[idx] );
    *   ```
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Glyph_To_Bitmap( FT_Glyph*         the_glyph,
                       FT_Render_Mode    render_mode,
                       const FT_Vector*  origin,
@@ -731,7 +751,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Matrix_Invert( FT_Matrix*  matrix );
 
   /* */

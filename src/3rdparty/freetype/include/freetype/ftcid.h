@@ -82,7 +82,11 @@ FT_BEGIN_HEADER
    * @since:
    *    2.3.6
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_CID_Registry_Ordering_Supplement( FT_Face       face,
                                            const char*  *registry,
                                            const char*  *ordering,
@@ -117,7 +121,11 @@ FT_BEGIN_HEADER
    * @since:
    *    2.3.9
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_CID_Is_Internally_CID_Keyed( FT_Face   face,
                                       FT_Bool  *is_cid );
 
@@ -151,7 +159,11 @@ FT_BEGIN_HEADER
    * @since:
    *    2.3.9
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_CID_From_Glyph_Index( FT_Face   face,
                                FT_UInt   glyph_index,
                                FT_UInt  *cid );

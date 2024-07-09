@@ -169,19 +169,19 @@ qt_internal_extend_target(Network CONDITION QT_FEATURE_dnslookup
         kernel/qdnslookup.cpp kernel/qdnslookup.h kernel/qdnslookup_p.h
 )
 
-qt_internal_extend_target(Network CONDITION UNIX
+qt_internal_extend_target(Network CONDITION (UNIX OR WASI)
     SOURCES
         kernel/qhostinfo_unix.cpp
         socket/qnativesocketengine_unix.cpp
         socket/qnet_unix_p.h
 )
 
-qt_internal_extend_target(Network CONDITION QT_FEATURE_linux_netlink AND UNIX
+qt_internal_extend_target(Network CONDITION QT_FEATURE_linux_netlink AND (UNIX OR WASI)
     SOURCES
         kernel/qnetworkinterface_linux.cpp
 )
 
-qt_internal_extend_target(Network CONDITION UNIX AND NOT QT_FEATURE_linux_netlink
+qt_internal_extend_target(Network CONDITION (UNIX OR WASI) AND NOT QT_FEATURE_linux_netlink
     SOURCES
         kernel/qnetworkinterface_unix.cpp
 )
@@ -262,7 +262,7 @@ qt_internal_extend_target(Network CONDITION APPLE
         kernel/qnetworkproxy_darwin.cpp
 )
 
-qt_internal_extend_target(Network CONDITION QT_FEATURE_libproxy AND UNIX AND NOT MACOS
+qt_internal_extend_target(Network CONDITION QT_FEATURE_libproxy AND (UNIX OR WASI) AND NOT MACOS
     SOURCES
         kernel/qnetworkproxy_libproxy.cpp
     LIBRARIES
@@ -275,7 +275,7 @@ qt_internal_extend_target(Network CONDITION ANDROID
         kernel/qnetworkproxy_android.cpp
 )
 
-qt_internal_extend_target(Network CONDITION UNIX AND NOT ANDROID AND NOT APPLE AND NOT QT_FEATURE_libproxy AND (UNIX OR WINRT)
+qt_internal_extend_target(Network CONDITION (UNIX OR WASI) AND NOT ANDROID AND NOT APPLE AND NOT QT_FEATURE_libproxy AND ((UNIX OR WASI) OR WINRT)
     SOURCES
         kernel/qnetworkproxy_generic.cpp
 )
@@ -316,7 +316,7 @@ qt_internal_extend_target(Network CONDITION INTEGRITY AND QT_FEATURE_localserver
         QT_LOCALSOCKET_TCP
 )
 
-qt_internal_extend_target(Network CONDITION QT_FEATURE_localserver AND UNIX AND NOT INTEGRITY
+qt_internal_extend_target(Network CONDITION QT_FEATURE_localserver AND (UNIX OR WASI) AND NOT INTEGRITY
     SOURCES
         socket/qlocalserver_unix.cpp
         socket/qlocalsocket_unix.cpp

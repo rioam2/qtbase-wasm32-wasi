@@ -117,7 +117,11 @@ FT_BEGIN_HEADER
    *   A scaled advance is returned in 16.16 format but isn't transformed by
    *   the affine transformation specified by @FT_Set_Transform.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_Advance( FT_Face    face,
                   FT_UInt    gindex,
                   FT_Int32   load_flags,
@@ -170,7 +174,11 @@ FT_BEGIN_HEADER
    *   Scaled advances are returned in 16.16 format but aren't transformed by
    *   the affine transformation specified by @FT_Set_Transform.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Get_Advances( FT_Face    face,
                    FT_UInt    start,
                    FT_UInt    count,

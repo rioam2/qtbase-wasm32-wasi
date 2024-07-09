@@ -85,7 +85,7 @@ qt_internal_extend_target(BundledFreetype CONDITION WIN32
         src/base/ftsystem.c
 )
 
-qt_internal_extend_target(BundledFreetype CONDITION UNIX
+qt_internal_extend_target(BundledFreetype CONDITION (UNIX OR WASI)
     SOURCES
         builds/unix/ftsystem.c
     INCLUDE_DIRECTORIES

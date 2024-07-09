@@ -95,7 +95,11 @@ FT_BEGIN_HEADER
    *   upcoming calls to @FT_Set_Pixel_Sizes, @FT_Set_Char_Size,
    *   @FT_Load_Glyph, @FT_Load_Char, etc.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_New_Size( FT_Face   face,
                FT_Size*  size );
 
@@ -116,7 +120,11 @@ FT_BEGIN_HEADER
    * @return:
    *   FreeType error code.  0~means success.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Done_Size( FT_Size  size );
 
 
@@ -145,7 +153,11 @@ FT_BEGIN_HEADER
    *   If `face` is the size's parent face object, this function changes the
    *   value of `face->size` to the input size handle.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_Activate_Size( FT_Size  size );
 
   /* */

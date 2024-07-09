@@ -230,9 +230,12 @@ void QEventDispatcherUNIXPrivate::markPendingSocketNotifiers()
         } notifiers[] = {
             { QSocketNotifier::Read,      POLLIN  | POLLHUP | POLLERR },
             { QSocketNotifier::Write,     POLLOUT | POLLHUP | POLLERR },
+#if !defined(Q_OS_WASI)
             { QSocketNotifier::Exception, POLLPRI | POLLHUP | POLLERR }
+#endif
         };
 
+#if !defined(Q_OS_WASI)
         for (const auto &n : notifiers) {
             QSocketNotifier *notifier = sn_set.notifiers[n.type];
 
@@ -248,6 +251,7 @@ void QEventDispatcherUNIXPrivate::markPendingSocketNotifiers()
             if (pfd.revents & n.flags)
                 setSocketNotifierPending(notifier);
         }
+#endif
     }
 
     pollfds.clear();

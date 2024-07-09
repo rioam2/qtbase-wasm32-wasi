@@ -202,7 +202,9 @@
       (FT_CMap_VariantCharListFunc) NULL,  /* variantchar_list */
 
     0,
+#if !defined(__wasi__)
     (TT_CMap_ValidateFunc)tt_cmap0_validate,  /* validate      */
+#endif
     (TT_CMap_Info_GetFunc)tt_cmap0_get_info   /* get_cmap_info */
   )
 
@@ -619,7 +621,9 @@
       (FT_CMap_VariantCharListFunc) NULL,  /* variantchar_list */
 
     2,
+#if !defined(__wasi__)
     (TT_CMap_ValidateFunc)tt_cmap2_validate,  /* validate      */
+#endif
     (TT_CMap_Info_GetFunc)tt_cmap2_get_info   /* get_cmap_info */
   )
 
@@ -1562,7 +1566,9 @@
       (FT_CMap_VariantCharListFunc) NULL,  /* variantchar_list */
 
     4,
+#if !defined(__wasi__)
     (TT_CMap_ValidateFunc)tt_cmap4_validate,  /* validate      */
+#endif
     (TT_CMap_Info_GetFunc)tt_cmap4_get_info   /* get_cmap_info */
   )
 
@@ -1735,7 +1741,9 @@
       (FT_CMap_VariantCharListFunc) NULL,  /* variantchar_list */
 
     6,
+#if !defined(__wasi__)
     (TT_CMap_ValidateFunc)tt_cmap6_validate,  /* validate      */
+#endif
     (TT_CMap_Info_GetFunc)tt_cmap6_get_info   /* get_cmap_info */
   )
 
@@ -2032,7 +2040,9 @@
       (FT_CMap_VariantCharListFunc) NULL,  /* variantchar_list */
 
     8,
+#if !defined(__wasi__)
     (TT_CMap_ValidateFunc)tt_cmap8_validate,  /* validate      */
+#endif
     (TT_CMap_Info_GetFunc)tt_cmap8_get_info   /* get_cmap_info */
   )
 
@@ -2207,7 +2217,9 @@
       (FT_CMap_VariantCharListFunc) NULL,  /* variantchar_list */
 
     10,
+#if !defined(__wasi__)
     (TT_CMap_ValidateFunc)tt_cmap10_validate,  /* validate      */
+#endif
     (TT_CMap_Info_GetFunc)tt_cmap10_get_info   /* get_cmap_info */
   )
 
@@ -2551,7 +2563,9 @@
       (FT_CMap_VariantCharListFunc) NULL,  /* variantchar_list */
 
     12,
+#if !defined(__wasi__)
     (TT_CMap_ValidateFunc)tt_cmap12_validate,  /* validate      */
+#endif
     (TT_CMap_Info_GetFunc)tt_cmap12_get_info   /* get_cmap_info */
   )
 
@@ -2867,7 +2881,9 @@
       (FT_CMap_VariantCharListFunc) NULL,  /* variantchar_list */
 
     13,
+#if !defined(__wasi__)
     (TT_CMap_ValidateFunc)tt_cmap13_validate,  /* validate      */
+#endif
     (TT_CMap_Info_GetFunc)tt_cmap13_get_info   /* get_cmap_info */
   )
 
@@ -3644,7 +3660,9 @@
       (FT_CMap_VariantCharListFunc) tt_cmap14_variant_chars,
 
     14,
+#if !defined(__wasi__)
     (TT_CMap_ValidateFunc)tt_cmap14_validate,  /* validate      */
+#endif
     (TT_CMap_Info_GetFunc)tt_cmap14_get_info   /* get_cmap_info */
   )
 
@@ -3757,7 +3775,9 @@
       (FT_CMap_VariantCharListFunc) NULL,  /* variantchar_list */
 
     ~0U,
+#if !defined(__wasi__)
     (TT_CMap_ValidateFunc)NULL,  /* validate      */
+#endif
     (TT_CMap_Info_GetFunc)NULL   /* get_cmap_info */
   )
 
@@ -3834,19 +3854,24 @@
             volatile TT_ValidatorRec  valid;
             volatile FT_Error         error = FT_Err_Ok;
 
-
+#if !defined(__wasi__)
             ft_validator_init( FT_VALIDATOR( &valid ), cmap, limit,
                                FT_VALIDATE_DEFAULT );
+#endif
 
             valid.num_glyphs = (FT_UInt)face->max_profile.numGlyphs;
 
+#if !defined(__wasi__)
             if ( ft_setjmp( FT_VALIDATOR( &valid )->jump_buffer) == 0 )
             {
               /* validate this cmap sub-table */
               error = clazz->validate( cmap, FT_VALIDATOR( &valid ) );
             }
+#endif
 
+#if !defined(__wasi__)
             if ( !valid.validator.error )
+#endif
             {
               FT_CMap  ttcmap;
 
@@ -3863,11 +3888,13 @@
                 ((TT_CMap)ttcmap)->flags = (FT_Int)error;
               }
             }
+#if !defined(__wasi__)
             else
             {
               FT_TRACE0(( "tt_face_build_cmaps:"
                           " broken cmap sub-table ignored\n" ));
             }
+#endif
             break;
           }
         }

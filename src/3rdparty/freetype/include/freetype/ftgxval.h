@@ -221,7 +221,11 @@ FT_BEGIN_HEADER
    *   application hasn't asked for validation, or the validator doesn't have
    *   the ability to validate the sfnt table.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_TrueTypeGX_Validate( FT_Face   face,
                           FT_UInt   validation_flags,
                           FT_Bytes  tables[FT_VALIDATE_GX_LENGTH],
@@ -313,7 +317,11 @@ FT_BEGIN_HEADER
    *   `ckern_table`, by calling @FT_ClassicKern_Free.  A `NULL` value
    *   indicates that the table doesn't exist in the font.
    */
+#if defined(__wasi__)
+  FT_EXPORT( int )
+#else
   FT_EXPORT( FT_Error )
+#endif
   FT_ClassicKern_Validate( FT_Face    face,
                            FT_UInt    validation_flags,
                            FT_Bytes  *ckern_table );
