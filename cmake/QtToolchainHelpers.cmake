@@ -9,8 +9,8 @@ function(qt_internal_create_toolchain_file)
         file(TO_CMAKE_PATH "${CMAKE_TOOLCHAIN_FILE}" __qt_chainload_toolchain_file)
         set(init_original_toolchain_file
             "
-set(__qt_initially_configured_toolchain_file \"${__qt_chainload_toolchain_file}\")
-set(__qt_chainload_toolchain_file \"\${__qt_initially_configured_toolchain_file}\")
+set(__qt_initially_configured_toolchain_file \"\")
+set(__qt_chainload_toolchain_file \"\")
 ")
     endif()
 

@@ -10,8 +10,8 @@ elseif(DEFINED ENV{QT_REQUIRE_HOST_PATH_CHECK})
 else()
     set(__qt_platform_requires_host_info_package "@platform_requires_host_info_package@")
 endif()
-set(__qt_platform_initial_qt_host_path "@qt_host_path_absolute@")
-set(__qt_platform_initial_qt_host_path_cmake_dir "@qt_host_path_cmake_dir_absolute@")
+set(__qt_platform_initial_qt_host_path "")
+set(__qt_platform_initial_qt_host_path_cmake_dir "")
 
 _qt_internal_setup_qt_host_path(
     "${__qt_platform_requires_host_info_package}"
