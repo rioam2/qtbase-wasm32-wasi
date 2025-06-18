@@ -109,7 +109,7 @@ using namespace Qt::StringLiterals;
 
 namespace QTest {
 namespace CrashHandler {
-#if defined(Q_OS_UNIX) && (!defined(Q_OS_WASM) || QT_CONFIG(thread))
+#if defined(Q_OS_UNIX) && (!(defined(Q_OS_WASM) || defined(Q_OS_WASI)) || QT_CONFIG(thread))
 struct iovec IoVec(struct iovec vec)
 {
     return vec;
@@ -167,7 +167,7 @@ struct iovec asyncSafeToString(int n, AsyncSafeIntBuffer &&result)
     r.iov_len = ptr - result.array.data();
     return r;
 };
-#endif // defined(Q_OS_UNIX) && (!defined(Q_OS_WASM) || QT_CONFIG(thread))
+#endif // defined(Q_OS_UNIX) && (!(defined(Q_OS_WASM) || defined(Q_OS_WASI)) || QT_CONFIG(thread))
 
 bool alreadyDebugging()
 {
@@ -318,7 +318,7 @@ void prepareStackTrace()
 #endif // Q_OS_UNIX
 }
 
-#if !defined(Q_OS_WASM) || QT_CONFIG(thread)
+#if !(defined(Q_OS_WASM) || defined(Q_OS_WASI)) || QT_CONFIG(thread)
 void printTestRunTime()
 {
     const int msecsFunctionTime = qRound(QTestLog::msecsFunctionTime());
@@ -339,7 +339,7 @@ void generateStackTrace()
     (void) prctl(PR_SET_PTRACER, PR_SET_PTRACER_ANY);
 #  endif
 
-#  if defined(Q_OS_UNIX) && !defined(Q_OS_WASM) && !defined(Q_OS_INTEGRITY) && !defined(Q_OS_VXWORKS)
+#  if defined(Q_OS_UNIX) && !defined(Q_OS_WASM) && !defined(Q_OS_WASI) && !defined(Q_OS_INTEGRITY) && !defined(Q_OS_VXWORKS)
     writeToStderr("\n=== Stack trace ===\n");
 
     // execlp() requires null-termination, so call the default constructor
@@ -376,9 +376,9 @@ void generateStackTrace()
     }
 
     writeToStderr("=== End of stack trace ===\n");
-#  endif // Q_OS_UNIX && !Q_OS_WASM && !Q_OS_INTEGRITY && !Q_OS_VXWORKS
+#  endif // defined(Q_OS_UNIX) && !defined(Q_OS_WASM) && !defined(Q_OS_WASI) && !defined(Q_OS_INTEGRITY) && !defined(Q_OS_VXWORKS)
 }
-#endif  // !defined(Q_OS_WASM) || QT_CONFIG(thread)
+#endif  // !(defined(Q_OS_WASM) || defined(Q_OS_WASI)) || QT_CONFIG(thread)
 
 #if defined(Q_OS_WIN)
 void blockUnixSignals()
@@ -386,7 +386,7 @@ void blockUnixSignals()
   // Windows does have C signals, but doesn't use them for the purposes we're
   // talking about here
 }
-#elif defined(Q_OS_UNIX) && !defined(Q_OS_WASM)
+#elif defined(Q_OS_UNIX) && !(defined(Q_OS_WASM) || defined(Q_OS_WASI))
 void blockUnixSignals()
 {
     // Block most Unix signals so the WatchDog thread won't be called when
@@ -502,7 +502,7 @@ LONG WINAPI WindowsFaultHandler::windowsFaultHandler(struct _EXCEPTION_POINTERS 
 
     return EXCEPTION_EXECUTE_HANDLER;
 }
-#elif defined(Q_OS_UNIX) && !defined(Q_OS_WASM)
+#elif defined(Q_OS_UNIX) && !(defined(Q_OS_WASM) || defined(Q_OS_WASI))
 bool FatalSignalHandler::pauseOnCrash = false;
 
 FatalSignalHandler::FatalSignalHandler()
@@ -667,7 +667,7 @@ void FatalSignalHandler::actionHandler(int signum, siginfo_t *info, void *)
     // we shouldn't reach here!
     std::abort();
 }
-#endif // defined(Q_OS_UNIX) && !defined(Q_OS_WASM)
+#endif // defined(Q_OS_UNIX) && !(defined(Q_OS_WASM) || defined(Q_OS_WASI))
 
 } // namespace CrashHandler
 } // namespace QTest

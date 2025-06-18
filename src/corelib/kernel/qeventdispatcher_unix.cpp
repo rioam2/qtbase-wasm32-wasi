@@ -174,8 +174,10 @@ int QThreadPipe::check(const pollfd &pfd)
 
 QEventDispatcherUNIXPrivate::QEventDispatcherUNIXPrivate()
 {
+#if !defined(Q_OS_WASI)
     if (Q_UNLIKELY(threadPipe.init() == false))
         qFatal("QEventDispatcherUNIXPrivate(): Cannot continue without a thread pipe");
+#endif
 }
 
 QEventDispatcherUNIXPrivate::~QEventDispatcherUNIXPrivate()
