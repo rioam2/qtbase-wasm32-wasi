@@ -39,7 +39,7 @@
 QT_BEGIN_NAMESPACE
 namespace QTest {
 namespace CrashHandler {
-#if defined(Q_OS_UNIX) && (!defined(Q_OS_WASM) || QT_CONFIG(thread))
+#if defined(Q_OS_UNIX) && (!(defined(Q_OS_WASM) || defined(Q_OS_WASI)) || QT_CONFIG(thread))
     struct iovec IoVec(struct iovec vec);
     struct iovec IoVec(const char *str);
 
@@ -73,12 +73,12 @@ namespace CrashHandler {
     {
         return std::to_string(n);
     }
-#endif // defined(Q_OS_UNIX) && (!defined(Q_OS_WASM) || QT_CONFIG(thread))
+#endif // defined(Q_OS_UNIX) && (!(defined(Q_OS_WASM) || defined(Q_OS_WASI)) || QT_CONFIG(thread))
 
     bool alreadyDebugging();
     void blockUnixSignals();
 
-#if !defined(Q_OS_WASM) || QT_CONFIG(thread)
+#if !(defined(Q_OS_WASM) || defined(Q_OS_WASI)) || QT_CONFIG(thread)
     void printTestRunTime();
     void generateStackTrace();
 #endif
@@ -146,7 +146,7 @@ namespace CrashHandler {
         static LONG WINAPI windowsFaultHandler(struct _EXCEPTION_POINTERS *exInfo);
     };
     using FatalSignalHandler = WindowsFaultHandler;
-#elif defined(Q_OS_UNIX) && !defined(Q_OS_WASM)
+#elif defined(Q_OS_UNIX) && !defined(Q_OS_WASM) && !defined(Q_OS_WASI)
     class Q_TESTLIB_EXPORT FatalSignalHandler
     {
     public:
