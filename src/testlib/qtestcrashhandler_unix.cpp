@@ -414,7 +414,7 @@ void generateStackTrace(quintptr ip)
     (void) prctl(PR_SET_PTRACER, PR_SET_PTRACER_ANY);
 #  endif
 
-#  if !defined(Q_OS_INTEGRITY) && !defined(Q_OS_VXWORKS)
+#  if !defined(Q_OS_INTEGRITY) && !defined(Q_OS_VXWORKS) && !defined(Q_OS_WASI)
     writeToStderr("\n=== Stack trace ===\n");
 
     // execlp() requires null-termination, so call the default constructor
@@ -488,7 +488,7 @@ void generateStackTrace(quintptr ip)
 #  endif // !Q_OS_INTEGRITY && !Q_OS_VXWORKS
 }
 
-#ifndef Q_OS_WASM // no signal handling for WASM
+#if !(defined(Q_OS_WASM) || defined(Q_OS_WASI)) // no signal handling for WASM or WASI
 void blockUnixSignals()
 {
     // Block most Unix signals so the WatchDog thread won't be called when

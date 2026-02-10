@@ -2030,8 +2030,10 @@ static void stderr_message_handler(QtMsgType type, const QMessageLogContext &con
     // (still print empty lines, e.g. because message itself was empty)
     if (formattedMessage.isNull())
         return;
+#if !defined(Q_OS_WASI)
     fprintf(stderr, "%s\n", formattedMessage.toLocal8Bit().constData());
     fflush(stderr);
+#endif
 }
 
 namespace {

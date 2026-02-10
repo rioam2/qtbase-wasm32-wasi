@@ -39,7 +39,7 @@ namespace CrashHandler {
     bool alreadyDebugging();
     void blockUnixSignals();
 
-#if !defined(Q_OS_WASM) || QT_CONFIG(thread)
+#if !(defined(Q_OS_WASM) || defined(Q_OS_WASI)) || QT_CONFIG(thread)
     void printTestRunTime();
     void generateStackTrace(quintptr ip = 0);
 #endif
@@ -54,7 +54,7 @@ namespace CrashHandler {
         WindowsFaultHandler();
     };
     using FatalSignalHandler = WindowsFaultHandler;
-#elif defined(Q_OS_UNIX) && !defined(Q_OS_WASM)
+#elif defined(Q_OS_UNIX) && !(defined(Q_OS_WASM) || defined(Q_OS_WASI))
     class Q_TESTLIB_EXPORT FatalSignalHandler
     {
     public:
@@ -68,7 +68,7 @@ namespace CrashHandler {
         void freeAlternateStack();
         void *alternateStackBase = MAP_FAILED;
     };
-#else // Q_OS_WASM or weird systems
+#else // Q_OS_WASM, Q_OS_WASI or weird systems
 class Q_TESTLIB_EXPORT FatalSignalHandler {};
 inline void blockUnixSignals() {}
 #endif // Q_OS_* choice
