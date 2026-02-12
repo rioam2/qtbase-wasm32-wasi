@@ -14,23 +14,7 @@ cmake . \
     -DBUILD_SHARED_LIBS=OFF \
     -DQT_BUILD_EXAMPLES=OFF \
     -DQT_BUILD_TESTS=OFF \
-    -DQT_BUILD_BENCHMARKS=OFF \
-    -DQT_FEATURE_accessibility=OFF \
-    -DQT_FEATURE_androiddeployqt=OFF \
-    -DQT_FEATURE_animation=OFF \
-    -DQT_FEATURE_backtrace=OFF \
-    -DQT_FEATURE_dbus=OFF \
-    -DQT_FEATURE_debug=OFF \
-    -DQT_FEATURE_developer_build=OFF \
-    -DQT_FEATURE_dom=OFF \
-    -DQT_FEATURE_harfbuzz=OFF \
-    -DQT_FEATURE_ico=OFF \
-    -DQT_FEATURE_icu=OFF \
-    -DQT_FEATURE_network=OFF \
-    -DQT_FEATURE_pdf=OFF \
-    -DQT_FEATURE_timezone=OFF \
-    -DQT_FEATURE_translation=OFF \
-    -DQT_FEATURE_widgets=OFF
+    -DQT_BUILD_BENCHMARKS=OFF
 
 
 cmake --build ./build/host --parallel
@@ -41,11 +25,8 @@ cmake . \
     -G Ninja \
     `# Build configuration` \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_FIND_PACKAGE_TARGETS_GLOBAL=ON \
     -DQT_HOST_PATH="$script_dir/build/host" \
-    -DQT_HOST_PATH_CMAKE_DIR:PATH="$script_dir/build/host" \
     -DCMAKE_TOOLCHAIN_FILE="$script_dir/cmake/wasi/wasi-sdk.toolchain.cmake" \
-    -DQT_QMAKE_TARGET_MKSPEC=linux-clang-libc++-32 \
     -DQT_USE_DEFAULT_CMAKE_OPTIMIZATION_FLAGS=ON \
     -DBUILD_SHARED_LIBS=OFF \
     -DQT_BUILD_EXAMPLES=OFF \
@@ -53,8 +34,10 @@ cmake . \
     -DQT_BUILD_BENCHMARKS=OFF \
     -DINSTALL_BINDIR:STRING=bin \
     -DINSTALL_LIBEXECDIR:STRING=bin \
+    `# System configuration` \
     -DUNIX:BOOL=ON \
-    -DWASM:BOOL=ON \
+    -DWASM:BOOL=OFF \
+    -DQT_QMAKE_TARGET_MKSPEC=linux-clang-libc++-32 \
     `# Feature configuration` \
     -DQT_FEATURE_accessibility_atspi_bridge=OFF \
     -DQT_FEATURE_accessibility=OFF \
@@ -181,7 +164,7 @@ cmake . \
     -DQT_FEATURE_itemmodel=ON \
     -DQT_FEATURE_jalalicalendar=ON \
     -DQT_FEATURE_journald=OFF \
-    -DQT_FEATURE_jpeg=OFF \
+    -DQT_FEATURE_jpeg=ON \
     -DQT_FEATURE_kms=OFF \
     -DQT_FEATURE_largefile=OFF \
     -DQT_FEATURE_libinput_axis_api=OFF \
@@ -242,7 +225,7 @@ cmake . \
     -DQT_FEATURE_reduce_exports=ON \
     -DQT_FEATURE_reduce_relocations=OFF \
     -DQT_FEATURE_regularexpression=ON \
-    -DQT_FEATURE_relocatable=ON \
+    -DQT_FEATURE_relocatable=OFF \
     -DQT_FEATURE_renameat2=OFF \
     -DQT_FEATURE_rpath=OFF \
     -DQT_FEATURE_separate_debug_info=OFF \
@@ -290,9 +273,9 @@ cmake . \
     -DQT_FEATURE_testlib=ON \
     -DQT_FEATURE_textdate=ON \
     -DQT_FEATURE_texthtmlparser=ON \
-    -DQT_FEATURE_textmarkdownreader=ON \
-    -DQT_FEATURE_textmarkdownwriter=ON \
-    -DQT_FEATURE_textodfwriter=ON \
+    -DQT_FEATURE_textmarkdownreader=OFF \
+    -DQT_FEATURE_textmarkdownwriter=OFF \
+    -DQT_FEATURE_textodfwriter=OFF \
     -DQT_FEATURE_thread=OFF \
     -DQT_FEATURE_timezone=OFF \
     -DQT_FEATURE_translation=OFF \
@@ -318,7 +301,7 @@ cmake . \
     -DQT_FEATURE_whatsthis=OFF \
     -DQT_FEATURE_wheelevent=OFF \
     -DQT_FEATURE_widgets=OFF \
-    -DQT_FEATURE_x86intrin=ON \
+    -DQT_FEATURE_x86intrin=OFF \
     -DQT_FEATURE_xcb_egl_plugin=OFF \
     -DQT_FEATURE_xcb_glx_plugin=OFF \
     -DQT_FEATURE_xcb_glx=OFF \
