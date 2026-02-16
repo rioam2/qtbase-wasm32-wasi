@@ -53,11 +53,7 @@
 
 /* Minimum buffer size for raster object, that accounts
    for TWorker and TCell sizes.*/
-#if !defined(Q_OS_WASI)
-#  define MINIMUM_POOL_SIZE 8192
-#else
-#  define MINIMUM_POOL_SIZE 81920
-#endif
+#define MINIMUM_POOL_SIZE 8192
 
   QT_FT_EXPORT_VAR( const QT_FT_Raster_Funcs )  qt_ft_grays_raster;
 
